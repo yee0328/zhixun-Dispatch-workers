@@ -1,0 +1,61 @@
+#mobile #blue-overlay{
+    width: 100%;
+    height: 25vh;
+    color: var(--white);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 3em;
+}
+
+.selection-container {
+    position: absolute;
+    top: -3em;
+    left: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3em;
+    width: 100%;
+}
+
+.selection-container i {
+    font-size: 2rem;
+}
+
+.selection-container .selection {
+    box-shadow: var(--box-shadow);
+    padding: 1em 2em;
+    border-radius: var(--border-radius-lg);
+    display: flex;
+    align-items: center;
+    width: calc(100% / 2 + 6em);
+    justify-content: space-between;
+}
+
+.selection-container .selection span {
+    font-weight: bolder;
+    font-size: 1.3rem;
+}
+
+.selection-container .selection.selec-white {
+    color: var(--main-color);
+    background-color: var(--white);
+}
+
+.selection-container .selection.selec-blue {
+    color: var(--white);
+    background-color: var(--accent);
+}
+
+#mobile .nav-container {
+    display: flex;
+    justify-content: flex-end;
+    margin: 1em;
+}
+
+#mobile #navToggler i {
+    color: var(--white);
+    font-size: 1.5rem;
+}

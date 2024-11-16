@@ -1,0 +1,95 @@
+section#search {
+    border: solid 1px var(--mid-grey);
+}
+
+section#search .search-container {
+    display: flex;
+
+}
+
+section#search .search-container .form-group {
+    width: calc(70% - 1em);
+}
+
+section#search .search-container .form-group .form-control {
+    margin: 0;
+}
+
+section#search .search-container .form-group .input-wrapper {
+    position: relative;
+}
+
+section#search .search-container .form-group .input-wrapper>i {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--main-color);
+    right: 1em;
+    cursor: pointer;
+}
+
+section#search .search-container .btn-wrap {
+    flex: 1;
+    border-left: solid 1px var(--mid-grey);
+    margin-left: 1em;
+    padding-left: 1em;
+}
+
+section#search .search-container .btn-wrap button {
+    width: 100%;
+    background-color: var(--white);
+    border: solid 1px var(--mid-grey);
+}
+
+section#search .search-container .btn-wrap button:hover {
+    background-color: var(--main-color);
+    color: var(--white);
+}
+
+section#search .search-container .btn-wrap button i {
+    margin-left: .5em;
+    color: var(--accent);
+}
+
+section#name {
+    border-bottom: solid 1px var(--mid-grey);
+}
+
+section#name .name-container h5 {
+    margin: 0;
+}
+
+section#record .record-list {
+    padding: 0;
+}
+
+section#record .record-list .record-list-item {
+    padding: 1em;
+    background-color: var(--white);
+    border-radius: var(--border-radius);
+    margin-bottom: 1.5em;
+    box-shadow: var(--box-shadow-light);
+}
+
+section#record .record-list .record-list-item .record-details .record-date-container i {
+    margin-right: .5em;
+    color: var(--accent);
+    font-weight: bold;
+}
+
+section#record .record-list .record-list-item .record-details .record-date-container {
+    color: var(--accent);
+    margin-bottom: 1em;
+}
+
+section#record .record-list .record-list-item .record-details .brief-info {
+    font-weight: 700;
+    margin: .5em 0;
+}
+
+@media (max-width: 767px) {
+    section#search .search-container .btn-wrap {
+        margin-left: .5em;
+        padding-left: .5em;
+    }
+}

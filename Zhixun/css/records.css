@@ -1,0 +1,127 @@
+#main-content .left-container {
+    justify-content: end;
+}
+
+@media (max-width: 768px) {
+    #main-content .left-container {
+        justify-content: center;
+    }
+}
+
+.left-content {
+    background-color: var(--white);
+    padding: 30px;
+    box-shadow: var(--box-shadow-light);
+    border-radius: var(--border-radius);
+    margin: 2em 0;
+}
+
+.search-form label i {
+    margin-right: 1em;
+}
+
+.right-content {
+    padding: 2em;
+}
+
+.search-button {
+    background-color: var(--main-color);
+    color: var(--white);
+    border-radius: var(--border-radius);
+}
+
+.search-form .btn-wrap {
+    text-align: end;
+}
+
+/* input wrapper */
+#main-content .form-group .input-wrapper {
+    position: relative;
+    margin-bottom: 2em;
+}
+
+#main-content .form-group .input-wrapper>i {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--main-color);
+    right: 1em;
+    cursor: pointer;
+}
+
+/* dataTable */
+#records-table {
+    color: var(--white);
+    padding: 2em 0;
+    border: none;
+}
+
+#records-table_wrapper .dataTables_wrapper .dataTables_length select {
+    border-radius: var(--border-radius);
+    border: solid 1px var(--mid-grey);
+}
+
+table.dataTable tbody tr {
+    border: solid 1px var(--light-grey);
+    cursor: pointer;
+}
+
+table.dataTable thead tr th {
+    border-bottom: solid 1px var(--mid-grey);
+}
+
+table.dataTable thead th:first-child {
+    border-radius: var(--border-radius) 0 0 0;
+}
+
+table.dataTable thead th:last-child {
+    border-radius: 0 var(--border-radius) 0 0;
+}
+
+table.dataTable tbody tr:last-child td:first-child {
+    border-radius: 0 0 0 var(--border-radius);
+}
+
+table.dataTable tbody tr:last-child td:last-child {
+    border-radius: 0 0 var(--border-radius) 0;
+}
+
+/* .paginate_button.current{
+    background-color: transparent;
+    background: none;
+    color: var(--black);
+    border: none;
+} */
+.dataTables_wrapper .dataTables_filter input,
+.dataTables_wrapper .dataTables_length select {
+    border-radius: var(--border-radius);
+    border: solid 1px var(--mid-grey);
+    background-color: var(--white);
+}
+
+.dataTables_wrapper .dataTables_filter input:focus,
+.dataTables_wrapper .dataTables_length select:focus {
+    border: solid 1px var(--main-color);
+    outline: none;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button.current,
+.dataTables_wrapper .dataTables_paginate .paginate_button.current:hover {
+    background: none;
+    border: solid 1px transparent;
+    background-color: var(--accent);
+    color: var(--white) !important;
+    border-radius: var(--border-radius);
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+    border-radius: var(--border-radius);
+    border: solid 1px var(--mid-grey);
+    background: var(--white);
+    color: var(--black) !important;
+}
+
+/* #records-table .paginate_button.current, #records-table .paginate_button.current:hover{
+    border: none;
+    background-color: transparent;
+} */

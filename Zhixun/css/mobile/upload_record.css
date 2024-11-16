@@ -1,0 +1,79 @@
+.upload-box {
+    border: 1px dashed var(--mid-grey);
+    background-color: var(--white);
+    padding: 1.5em;
+    text-align: center;
+    border-radius: var(--border-radius);
+    color: var(--accent);
+    cursor: pointer;
+}
+
+.upload-box h5 {
+    color: var(--accent);
+    font-weight: 700;
+    letter-spacing: 1px;
+    margin: 0;
+}
+
+.upload-box small {
+    color: var(--dark-grey);
+    font-size: .8em;
+}
+
+.upload-box .icon-wrap {
+    display: inline-flex;
+    border-radius: var(--border-radius);
+    border: solid 1px var(--mid-grey);
+    padding: .8em;
+    margin-bottom: 1em;
+}
+
+.upload-box i {
+    color: var(--dark-grey);
+    font-size: 1.5em;
+    transform: none;
+}
+
+.uploaded-files {
+    margin-top: 1em;
+}
+
+.uploaded-file {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: var(--white);
+    padding: 1em;
+    border: solid 1px var(--mid-grey);
+    border-radius: var(--border-radius);
+    margin-bottom: 1.2em;
+}
+
+.uploaded-file i.file {
+    margin-right: 1em;
+}
+
+.uploaded-file .delete-icon {
+    padding: .2em .5em;
+    border-radius: 50%;
+    cursor: pointer;
+    border: solid 1px transparent;
+}
+
+.uploaded-file .delete-icon:hover {
+    border: solid 1px var(--red);
+}
+
+.uploaded-file i.fa-trash-can {
+    color: var(--red);
+}
+
+.btn-wrapper {
+    display: flex;
+    justify-content: center;
+    margin-top: 2em;
+}
+
+.btn-wrapper button {
+    flex: 1;
+}

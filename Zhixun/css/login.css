@@ -1,0 +1,83 @@
+#blue-overlay::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: -1;
+    width: 100%;
+    height: 50%;
+    background-color: var(--main-color);
+    border-radius: 0 0 100px 100px;
+}
+
+#blue-overlay {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.login-container {
+    background-color: var(--white);
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--box-shadow-light);
+    padding: 2em;
+}
+
+.login-container img {
+    width: 70px;
+    margin-bottom: 1em;
+}
+
+.login-container h3,
+.login-container h2 {
+    color: var(--main-color);
+}
+
+.login-container h3 {
+    margin-bottom: .5em;
+}
+
+.btn-login {
+    background-color: var(--accent);
+    color: var(--white);
+    font-weight: bold;
+    border: none;
+}
+
+.btn-login:hover,
+.btn-login:focus {
+    background-color: var(--main-color);
+    color: var(--white);
+    box-shadow: none;
+}
+
+#login-form label {
+    color: var(--dark-grey);
+}
+
+#login-form .form-control {
+    border: solid 1px var(--light-grey)
+}
+#login-form .form-group .input-wrapper {
+    position: relative;
+    margin-bottom: 2em;
+}
+#login-form .form-group .input-wrapper > i {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--main-color);
+}
+#login-form .form-group .input-wrapper i.fa-eye,
+#login-form .form-group .input-wrapper i.fa-eye-slash {
+    right: 1em;
+    cursor: pointer;
+}
+
+
+#login-form .form-control:focus {
+    border: solid 1px var(--main-color);
+    box-shadow: none;
+}

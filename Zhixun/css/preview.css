@@ -1,0 +1,169 @@
+* {
+    /* border: solid 1px magenta; */
+}
+
+.file-preview {
+    display: flex;
+    align-items: flex-start;
+    flex-wrap: wrap;
+}
+
+.content-container {
+    flex: 1;
+}
+
+.file-details,
+.thumbnails {
+    padding: 0 2em;
+}
+
+.file-details .info>p {
+    margin-bottom: 1em;
+}
+
+.file-details .info .uploaded-file {
+    padding: 0;
+}
+
+.file-details .info .uploaded-file a {
+    color: var(--main-color);
+    text-decoration: initial;
+}
+
+.file-details .info .uploaded-file a>i {
+    color: var(--accent);
+    margin-left: .5em;
+}
+
+.file-details .info .uploaded-file li {
+    margin-bottom: .5em;
+}
+
+.file-details .info>p>span,
+.uploaded-file,
+.file-details .upload-wrapper .note {
+    margin-left: 2em;
+}
+
+.file-details .upload-wrapper {
+    display: flex;
+    flex-direction: row;
+}
+
+.file-details .upload-wrapper .note {
+    color: var(--red);
+    font-size: .8em;
+}
+
+.thumbnails {
+    max-width: 500px;
+}
+
+.thumbnails .slider {
+    margin-left: 2em;
+}
+
+.file-image {
+    min-width: 300px;
+    text-align: center;
+}
+
+.file-image img {
+    max-width: 300px;
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--box-shadow-light);
+}
+
+.carousel-inner img {
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+}
+
+.file-preview .btn-wrapper {
+    text-align: end;
+    padding: 1em 3em 1em 1em;
+}
+
+.edit-button {
+    border: none;
+}
+
+.slider {
+    width: 100%;
+    margin: 50px auto;
+    margin-top: 1em;
+}
+
+.slider img {
+    border-radius: var(--border-radius);
+}
+
+.slider .slick-slide {
+    box-shadow: var(--box-shadow-light);
+    margin: 0px 5px;
+    width: 150px;
+}
+
+.slider>div {
+    display: block;
+}
+
+.slick-slide {
+    transition: all ease-in-out .3s;
+    opacity: .2;
+    margin: 1em .8em;
+}
+
+.slick-active {
+    opacity: .5;
+}
+
+.slick-current {
+    opacity: 1;
+}
+
+.slick-prev,
+.slick-next {
+    background: none;
+    border: none;
+    font-size: 24px;
+    color: var(--main-color);
+    cursor: pointer;
+    height: initial;
+}
+
+.slick-prev::before,
+.slick-next::before {
+    content: '';
+}
+
+.slick-prev:hover,
+.slick-next:hover {
+    color: var(--accent);
+}
+
+.slick-dots li button:before {
+    font-size: 15px;
+}
+
+#main-content .btn-wrapper{
+    padding: 1em;
+    text-align: end;
+}
+@media (max-width: 1399px) {
+    .file-image {
+        min-width: 100%;
+        margin-bottom: 3em;
+    }
+
+    .thumbnails {
+        max-width: 600px;
+    }
+
+    .file-preview .btn-wrapper {
+        text-align: end;
+        padding: 1em 0;
+    }
+
+}
