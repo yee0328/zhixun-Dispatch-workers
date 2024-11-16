@@ -1,3 +1,8 @@
+var auth = localStorage.getItem("auth");
+if (auth !== "success") {
+  window.location.href =
+    "http://localhost/20241110/Zhixun/templates/login.html";
+}
 $(document).ready(function () {
   $("#navToggler").on("click", function () {
     $("#offcanvasNavbar").toggleClass("show");
@@ -30,8 +35,7 @@ $(document).ready(function () {
 
     dropdownMenu.toggleClass("show");
   });
-  $(".getid").on("click", function () {
-    var id = $(this).find(".fa-solid").attr("id");
-    window.location.href = `http://localhost/20241110/Zhixun/templates/${id}.html`;
+  $("#card").on("click", function () {
+    window.location.href = `http://localhost/20241110/Zhixun/templates/view.html`;
   });
 });
