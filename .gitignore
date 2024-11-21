@@ -1,4 +1,7 @@
 node_modules/*
 config/env/.env
 logs/*
+backend/node_modules/*
+backend/config/*
+backend/logs/*
 backend/*

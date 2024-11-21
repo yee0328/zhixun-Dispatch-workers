@@ -1,180 +1,85 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
+  <head>
     <meta charset="UTF-8" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1,user-scalable=no"
+    />
     <title>派工系統</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" crossorigin="anonymous"
-        referrerpolicy="no-referrer"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
-        crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="../css/main.css">
-    <link rel="stylesheet" href="../css/view.css">
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+    <script src="../js/navbar.js"></script>
+    <script src="../js/view.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../css/main.css" />
+    <link rel="stylesheet" href="../css/view.css" />
+
 
     <!-- modal -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  </head>
 
-</head>
-
-<body>
+  <body>
     <!-- Navbar -->
-    <nav class="navbar">
-        <div class="container">
-            <div class="row justify-content-center">
-                <div class="col-md-10 col-xs-12 nav-container">
-                    <div class="d-flex align-items-center">
-                        <a class="navbar-brand" href="#">
-                            <img src="../images/logo_black.png" alt="Logo" width="50">
-                        </a>
-                        <div class="breadcrumb-container">
-                            <ol class="breadcrumb">
-                                <li class="breadcrumb-item"><a href="index.html"><i class="fa-solid fa-home"></i> 廠商分類</a></li>
-                                <li class="breadcrumb-item active" >機電</li>
-                            </ol>
-                        </div>
-                    </div>
-                    <button class="navbar-toggler" type="button" id="navToggler">
-                        <i class="fa-solid fa-bars"></i>
-                    </button>
-                </div>
-            </div>
-
-        </div>
-    </nav>
-    <!-- Offcanvas Sidebar -->
-    <div class="offcanvas-nav" id="offcanvasNavbar">
-        <div class="offcanvas-header">
-            <img src="../images/logo_black.png" alt="Logo" width="50">
-            <i class="fa-solid fa-xmark" id="closeOffcanvas"></i>
-        </div>
-        <div class="offcanvas-body p-4">
-            <ul class="navbar-nav">
-                <li class="nav-item">
-                    <a class="nav-link" href="index.html">
-                        <div><i class="fa-solid fa-home"></i>廠商分類</div>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">
-                        <div><i class="fa-solid fa-gear"></i>設定</div>
-                    </a>
-                </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link" href="#" data-dropdown="true">
-                        <div><i class="fa-solid fa-upload"></i>上傳發票</div>
-                        <i class="fa-solid fa-chevron-down"></i>
-                    </a>
-                    <ul class="dropdown-menu dropdown-content">
-                    </ul>
-                </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link" href="#" data-dropdown="true">
-                        <div><i class="fa-solid fa-magnifying-glass"></i>查詢發票</div>
-                        <i class="fa-solid fa-chevron-down"></i>
-                    </a>
-                    <ul class="dropdown-menu dropdown-content">
-                    </ul>
-                </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link" href="#" data-dropdown="true">
-                        <div><i class="fa-solid fa-upload"></i>上傳估價單</div>
-                        <i class="fa-solid fa-chevron-down"></i>
-                    </a>
-                    <ul class="dropdown-menu dropdown-content">
-                    </ul>
-                </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link" href="#" data-dropdown="true">
-                        <div><i class="fa-solid fa-magnifying-glass"></i>查詢估價單</div>
-                        <i class="fa-solid fa-chevron-down"></i>
-                    </a>
-                    <ul class="dropdown-menu dropdown-content">
-                    </ul>
-                </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link" href="#" data-dropdown="true">
-                        <div><i class="fa-solid fa-magnifying-glass"></i>維護及施工紀錄查詢</div>
-                        <i class="fa-solid fa-chevron-down"></i>
-                    </a>
-                    <ul class="dropdown-menu dropdown-content">
-                    </ul>
-                </li>
-            </ul>
-        </div>
-    </div>
+    <div class="navbar"></div>
 
     <div class="row">
-        <div class="col-md-6 col-xs-12 left-content">
-            <div class="container">
-                <div class="row justify-content-center">
-                    <div class="col-md-6 col-xs-12">
-                        <h2>您希望在機電</br>尋找或做些什麼呢？</h2>
-                        <p>What are you looking for now ?</p>
-                    </div>
-                </div>
+      <div class="col-md-6 col-xs-12 left-content">
+        <div class="container">
+          <div class="row justify-content-center">
+            <div class="col-md-6 col-xs-12">
+              <h2>您希望在機電<br />尋找或做些什麼呢？</h2>
+              <p>What are you looking for now ?</p>
             </div>
+          </div>
         </div>
-
-        <!-- Right Content -->
-        <div class="col-md-6 col-xs-12 right-content">
-            <div class="form-group">
-                <p class="section-title">發票</p>
-                <a href="" href="#" class="btn-custom">
-                    上傳發票
-                    <span><i class="fa-solid fa-file-upload"></i></span>
-                </a>
-                <a href="#" class="btn-custom">
-                    查詢估發票紀錄
-                    <span><i class="fa-solid fa-file-alt"></i></span>
-                </a>
-            </div>
-            <div class="form-group">
-                <p class="section-title">估價單</p>
-                <a href="upload_quotation.html" class="btn-custom">
-                    上傳估價單
-                    <span><i class="fa-solid fa-file-upload"></i></span>
-                </a>
-                <a href="records_assesment.html" class="btn-custom">
-                    查詢估價單紀錄
-                    <span><i class="fa-solid fa-file-alt"></i></span>
-                </a>
-            </div>
-            <div class="form-group">
-                <p class="section-title">紀錄查詢</p>
-                <a href="records_maintenance.html" class="btn-custom">
-                    維護及施工紀錄查詢
-                    <span><i class="fa-solid fa-search"></i></span>
-                </a>
-            </div>
+      </div>
+      <!-- Right Content -->
+      <div class="col-md-6 col-xs-12 right-content">
+        <div class="form-group">
+          <p class="section-title">發票</p>
+          <div class="btn-custom upload">
+            上傳發票
+            <span><i class="fa-solid fa-file-upload invoice"></i></span>
+          </div>
+          <div class="btn-custom">
+            查詢發票紀錄
+            <span><i class="fa-solid fa-file-alt"></i></span>
+          </div>
         </div>
-
-        <script>
-            $(document).ready(function () {
-                $('#navToggler').on('click', function () {
-                    $('#offcanvasNavbar').toggleClass('show');
-                });
-
-                $('#closeOffcanvas').on('click', function () {
-                    $('#offcanvasNavbar').removeClass('show');
-                });
-
-                $('[data-dropdown="true"]').on('click', function () {
-                    $(this).toggleClass("active");
-                    const dropdownMenu = $(this).siblings('.dropdown-menu');
-                    if (dropdownMenu.children().length === 0) {
-                        const dropdownItems = ["機電", "弱電", "電梯", "廚餘管線", "污水處理", "園藝", "清潔"];
-                        dropdownItems.forEach(item => {
-                            dropdownMenu.append(`<li><a class="dropdown-item" href="#">${item}</a></li>`);
-                        });
-                    }
-                    dropdownMenu.toggleClass('show');
-                });
-
-            });
-        </script>
-</body>
-
+        <div class="form-group">
+          <p class="section-title">估價單</p>
+          <div class="btn-custom upload">
+            上傳估價單
+            <span><i class="fa-solid fa-file-upload Estimate"></i></span>
+          </div>
+          <div class="btn-custom">
+            查詢估價單紀錄
+            <span><i class="fa-solid fa-file-alt"></i></span>
+          </div>
+        </div>
+        <div class="form-group">
+          <p class="section-title">紀錄查詢</p>
+          <div class="btn-custom">
+            維護及施工紀錄查詢
+            <span><i class="fa-solid fa-search"></i></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
 </html>

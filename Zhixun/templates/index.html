@@ -1,191 +1,134 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
+  <head>
     <meta charset="UTF-8" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1,user-scalable=no"
+    />
     <title>派工系統</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" crossorigin="anonymous"
-        referrerpolicy="no-referrer"></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
     <script src="../js/index.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
-        crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="../css/main.css">
-    <link rel="stylesheet" href="../css/index.css">
-</head>
+    <script src="../js/navbar.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../css/main.css" />
+    <link rel="stylesheet" href="../css/index.css" />
+  </head>
 
-<body>
-
+  <body>
     <!-- Navbar -->
-    <nav class="navbar">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="#">
-                <img src="../images/logo_black.png" alt="Logo" width="50">
-            </a>
-            <button class="navbar-toggler" type="button" id="navToggler">
-                <i class="fa-solid fa-bars"></i>
-            </button>
-        </div>
-    </nav>
+    <div class="navbar"></div>
 
-    <!-- Offcanvas Sidebar -->
-    <div class="offcanvas-nav" id="offcanvasNavbar">
-        <div class="offcanvas-header">
-            <img src="../images/logo_black.png" alt="Logo" width="50">
-            <i class="fa-solid fa-xmark" id="closeOffcanvas"></i>
-        </div>
-        <div class="offcanvas-body p-4">
-            <ul class="navbar-nav">
-                <li class="nav-item">
-                    <a class="nav-link" href="index.html">
-                        <div><i class="fa-solid fa-home"></i>廠商分類</div>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">
-                        <div><i class="fa-solid fa-gear"></i>設定</div>
-                    </a>
-                </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link" href="#" data-dropdown="true">
-                        <div><i class="fa-solid fa-upload"></i>上傳發票</div>
-                        <i class="fa-solid fa-chevron-down"></i>
-                    </a>
-                    <ul class="dropdown-menu dropdown-content">
-                    </ul>
-                </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link" href="#" data-dropdown="true">
-                        <div><i class="fa-solid fa-magnifying-glass"></i>查詢發票</div>
-                        <i class="fa-solid fa-chevron-down"></i>
-                    </a>
-                    <ul class="dropdown-menu dropdown-content">
-                    </ul>
-                </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link" href="#" data-dropdown="true">
-                        <div><i class="fa-solid fa-upload"></i>上傳估價單</div>
-                        <i class="fa-solid fa-chevron-down"></i>
-                    </a>
-                    <ul class="dropdown-menu dropdown-content">
-                    </ul>
-                </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link" href="#" data-dropdown="true">
-                        <div><i class="fa-solid fa-magnifying-glass"></i>查詢估價單</div>
-                        <i class="fa-solid fa-chevron-down"></i>
-                    </a>
-                    <ul class="dropdown-menu dropdown-content">
-                    </ul>
-                </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link" href="#" data-dropdown="true">
-                        <div><i class="fa-solid fa-magnifying-glass"></i>維護及施工紀錄查詢</div>
-                        <i class="fa-solid fa-chevron-down"></i>
-                    </a>
-                    <ul class="dropdown-menu dropdown-content">
-                    </ul>
-                </li>
-            </ul>
-        </div>
-    </div>
 
     <section id="dashboard-section">
-        <div class="container">
-            <div class="row justify-content-center">
-                <div class="col-12">
-                    <div class="text-center">
-                        <h2 class="dashboard-title">圓山硯</h2>
-                    </div>
-                    <div class="row gy-4">
-                        <div class="col-md-3">
-                            <div class="card light-shadow ">
-                                <div class="card-content">
-                                    <div class="icon-box yellow">
-                                        <i class="fa-solid fa-bolt"></i>
-                                    </div>
-                                    <p>機電</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-3">
-                            <div class="card ">
-                                <div class="card-content ">
-                                    <div class="icon-box yellow">
-                                        <i class="fa-solid fa-bolt"></i>
-                                    </div>
-                                    <p>弱電</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-3">
-                            <div class="card light-shadow ">
-                                <div class="card-content">
-                                    <div class="icon-box green">
-                                        <i class="fa-solid fa-elevator" ></i>
-                                    </div>
-                                    <p>電梯</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-3">
-                            <div class="card ">
-                                <div class="card-content ">
-                                    <div class="icon-box gray">
-                                        <i class="fa-solid fa-kitchen-set"></i>
-                                    </div>
-                                    <p>廚餘管線</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-3">
-                            <div class="card ">
-                                <div class="card-content">
-                                    <div class="icon-box gray">
-                                        <i class="fa-solid fa-water" ></i>
-                                    </div>
-                                    <p>污水處理</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-3">
-                            <div class="card light-shadow ">
-                                <div class="card-content">
-                                    <div class="icon-box blue">
-                                        <i class="fa-solid fa-water-ladder"></i>
-                                    </div>
-                                    <p>泳池</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-3">
-                            <div class="card ">
-                                <div class="card-content">
-                                    <div class="icon-box pink">
-                                        <i class="fa-solid fa-pagelines"></i>
-                                    </div>
-                                    <p>園藝</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-3">
-                            <div class="card light-shadow">
-                                <div class="card-content">
-                                    <div class="icon-box purple">
-                                        <i class="fa-solid fa-broom"></i>
-                                    </div>
-                                    <p>清潔</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+      <div class="container">
+        <div class="row justify-content-center">
+          <div class="col-12">
+            <div class="text-center">
+              <h2 class="dashboard-title">富邦大無疆C館</h2>
             </div>
+            <div class="row gy-4">
+              <div class="col-md-3">
+                <div class="beta">
+                  <p class="betatext">目前本體驗版僅提供機電功能作為試用</p>
+                  <div class="card light-shadow Trial">
+                    <div class="card-content">
+                      <div class="icon-box yellow">
+                        <i class="fa-solid fa-bolt"></i>
+                      </div>
+                      <p>機電</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="card">
+                  <div class="card-content">
+                    <div class="icon-box yellow">
+                      <i class="fa-solid fa-battery"></i>
+                    </div>
+                    <p>弱電</p>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="card light-shadow">
+                  <div class="card-content">
+                    <div class="icon-box green">
+                      <i class="fa-solid fa-elevator"></i>
+                    </div>
+                    <p>電梯</p>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="card">
+                  <div class="card-content">
+                    <div class="icon-box gray">
+                      <i class="fa-solid fa-kitchen-set"></i>
+                    </div>
+                    <p>廚餘管線</p>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="card">
+                  <div class="card-content">
+                    <div class="icon-box gray">
+                      <i class="fa-solid fa-water"></i>
+                    </div>
+                    <p>污水處理</p>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="card light-shadow">
+                  <div class="card-content">
+                    <div class="icon-box blue">
+                      <i class="fa-solid fa-water-ladder"></i>
+                    </div>
+                    <p>泳池</p>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="card">
+                  <div class="card-content">
+                    <div class="icon-box pink">
+                      <i class="fa-solid fa-pagelines"></i>
+                    </div>
+                    <p>園藝</p>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="card light-shadow">
+                  <div class="card-content">
+                    <div class="icon-box purple">
+                      <i class="fa-solid fa-broom"></i>
+                    </div>
+                    <p>清潔</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
+      </div>
     </section>
-
-</body>
-
+  </body>
 </html>

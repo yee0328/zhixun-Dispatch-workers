@@ -1,91 +1,91 @@
 * {
-    /* border: solid 1px magenta; */
+  /* border: solid 1px magenta; */
 }
 
 #dashboard-section {
-    height: 100vh;
-    margin: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding-top: 50px;
+  height: 100vh;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 50px;
 }
 
 .dashboard-title {
-    font-weight: 700;
-    margin-bottom: 2em;
-    color: var(--main-color);
+  font-weight: 700;
+  margin-bottom: 2em;
+  color: var(--main-color);
 }
 
 .card {
-    border-radius: var(--border-radius);
-    transition: transform 0.2s;
-    border: solid 1px var(--mid-grey);
-    background-color: var(--light-grey);
+  border-radius: var(--border-radius);
+  transition: transform 0.2s;
+  border: solid 1px var(--mid-grey);
+  background-color: var(--light-grey);
 }
 
 .card.light-shadow {
-    box-shadow: var(--box-shadow-light);
-    border: none;
+  box-shadow: var(--box-shadow-light);
+  border: none;
 }
 
 .card:hover {
-    transform: translateY(-5px);
+  transform: translateY(-5px);
 }
 
 .card-content {
-    background-color: var(--white);
-    border: solid 1px var(--mid-grey);
-    padding: .8em;
-    margin: 2em;
-    border-radius: var(--border-radius);
-    display: flex;
-    flex-direction: column;
+  background-color: var(--white);
+  border: solid 1px var(--mid-grey);
+  padding: 0.8em;
+  margin: 2em;
+  border-radius: var(--border-radius);
+  display: flex;
+  flex-direction: column;
 }
 
 .icon-box {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    margin-bottom: 1.5em;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  margin-bottom: 1.5em;
 }
 
-.icon-box i{
-    color: var(--white);
-    font-size: 1.5em;
+.icon-box i {
+  color: var(--white);
+  font-size: 1.5em;
 }
 
 .icon-box.yellow {
-    background-color: #F7CA2B;
+  background-color: #f7ca2b;
 }
 
 .icon-box.orange {
-    background-color: #EEA651;
+  background-color: #eea651;
 }
 
 .icon-box.green {
-    background-color: #91DA86;
+  background-color: #91da86;
 }
 
 .icon-box.black {
-    background-color: #000000;
+  background-color: #000000;
 }
 
 .icon-box.blue {
-    background-color: #2B69F7;
+  background-color: #2b69f7;
 }
 
 .icon-box.gray {
-    background-color: #CCCCCC;
+  background-color: #cccccc;
 }
 
 .icon-box.pink {
-    background-color: #FF99D6;
+  background-color: #ff99d6;
 }
 
 .icon-box.purple {
-    background-color: #99B0FF;
+  background-color: #99b0ff;
 }
