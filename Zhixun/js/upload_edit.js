@@ -66,7 +66,6 @@ $(document).ready(function () {
     );
     cancelModal.hide();
   });
-
   $("#uploadForm").on("submit", function (event) {
     event.preventDefault();
     if ($("#uploadedFileList").children().length === 0) {
@@ -74,38 +73,24 @@ $(document).ready(function () {
       return;
     }
 
-    var formData = new FormData();
-
-    // 獲取其他表單數據
-    const formElements = $(this).serializeArray();
-    formElements.forEach((element) => {
-      formData.append(element.name, element.value);
-    });
-
+    const formData = new FormData(this);
     $("#uploadedFileList .uploaded-file").each(function () {
       const fileUrl = $(this).data("file-url");
-      const fileName = $(this).find("span").text();
-
-      // 將 blob URL 轉換為檔案
-      fetch(fileUrl)
-        .then((response) => response.blob())
-        .then((blob) => {
-          formData.append("files[]", blob, fileName);
-        });
+      formData.append("files[]", fileUrl);
     });
-    // $.ajax({
-    //   url: "api",
-    //   type: "POST",
-    //   data: formData,
-    //   contentType: false,
-    //   processData: false,
-    //   success: function (response) {
-    //     alert("文件上傳成功！");
-    //     window.location.reload();
-    //   },
-    //   error: function (xhr, status, error) {
-    //     alert("文件上傳失敗，請重試。");
-    //   },
-    // });
+
+    $.ajax({
+      url: "api",
+      type: "POST",
+      data: formData,
+      contentType: false,
+      processData: false,
+      success: function (response) {
+        alert("文件上傳成功！");
+      },
+      error: function (xhr, status, error) {
+        alert("文件上傳失敗，請重試。");
+      },
+    });
   });
 });
