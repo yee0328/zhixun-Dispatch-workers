@@ -4,4 +4,5 @@ logs/*
 backend/node_modules/*
 backend/config/*
 backend/logs/*
-backend/*
+file/*
+Zhixun/files/*
