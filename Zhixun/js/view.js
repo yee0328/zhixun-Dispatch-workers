@@ -1,28 +1,55 @@
-$(document).ready(function () {
-  // 從 localStorage 獲取並處理圖示類型
-  const dict = {
-    "fa-bolt": "機電",
-    "fa-battery": "弱電",
-    "fa-elevator": "電梯",
-    "fa-kitchen-set": "廚餘管線",
-    "fa-water": "污水處理",
-    "fa-water-ladder": "泳池",
-    "fa-pagelines": "園藝",
-    "fa-broom": "清潔",
-  };
-  const iconType = localStorage.getItem("iconType") || "fa-question"; // 設置預設值
-  const iconClass = dict[iconType]; // 設置預設圖示
-  if (iconType) {
-    $(".breadcrumb-item.active").text(iconClass);
-  }
+//刪快取資料夾裡的檔案
+const orgdata = JSON.parse(localStorage.getItem("orgdata"));
+// console.log(orgdata[0].file_name);
 
+if (orgdata) {
+  if (orgdata[0].edit === 0) {
+    const file_name = orgdata[0].file_name;
+    const floder = orgdata[0].floder;
+    $.ajax({
+      url: `${window.API_CONFIG.baseUrl}/deletecache`,
+      type: "POST",
+      data: "file_name=" + file_name + "&floder=" + floder,
+
+      success: function (response) {
+        console.log("Response data:", response);
+      },
+      error: function (error) {
+        console.log("Error fetching files:", error);
+      },
+    });
+    localStorage.removeItem("orgdata");
+  }
+}
+$(document).ready(function () {
+  const iconText = "機電"; // 設置預設值
+  if (typeof BreadcrumbManager !== "undefined") {
+    console.log("1");
+    BreadcrumbManager.updateBreadcrumb(iconText);
+  }
   $(".upload").on("click", function () {
     var uploadType = $(this).find(".fa-solid").attr("class").split(" ").at(-1);
-    // localStorage.setItem("uploadType", uploadType);
-    if (uploadType === "invoice") {
-      window.location.href = `upload_invoice.html`;
-    } else {
-      window.location.href = `upload_assessment.html`;
-    }
+    var uploadtext = $(this).text();
+
+    localStorage.setItem("uploadtext", uploadtext);
+    window.location.href = `upload_${uploadType}.html`;
+  });
+  if (!localStorage.getItem("orgdata")) {
+    console.log("beforeunload event was triggered");
+  } else {
+    console.log("fail");
+  }
+
+  $(".record").on("click", function () {
+    var recordType = $(this).find(".fa-solid").attr("class").split(" ").at(-1);
+    // var recordtext = $(this).text();
+    // console.log(recordtext);
+    // localStorage.setItem("recordtext", recordtext);
+    window.location.href = `records_${recordType}.html`;
+    // if (recordType === "invoice") {
+    //   window.location.href = `records_invoice.html`;
+    // } else {
+    //   window.location.href = `records_rec.html`;
+    // }
   });
 });
