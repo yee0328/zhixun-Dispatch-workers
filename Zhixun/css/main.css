@@ -52,7 +52,9 @@ ul {
 li {
   font-size: 1rem;
 }
-
+.clickable {
+  cursor: pointer; /* 設置鼠標指針為點擊圖示 */
+}
 /* .form-control:disabled,
 .form-control[readonly] {
     background-color: var(--white);
@@ -342,10 +344,16 @@ footer {
   cursor: pointer;
 }
 .beta {
-  border-width: 1px;
+  border-width: 10px;
   border-style: solid;
   border-color: red;
 }
 .betatext {
   color: red;
+  font-size: 20px;
+}
+.Trial {
+  border-width: 10px;
+  border-style: solid;
+  border-color: red;
 }
