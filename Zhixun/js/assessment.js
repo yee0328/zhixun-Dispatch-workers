@@ -1,8 +1,14 @@
 $(document).ready(function () {
-  var uploadType = localStorage.getItem("uploadType");
+  const iconText = "機電"; // 設置預設值
+  const uploadtext = "上傳估價單";
+  if (typeof BreadcrumbManager !== "undefined") {
+    console.log("1");
+    BreadcrumbManager.updateBreadcrumb(iconText, uploadtext);
+  }
+
   $("#uploadBox").on("click", function () {
     const fileInput = $(
-      '<input type="file" accept=".pdf, .png, .jpeg, .jpg" style="display:none;">'
+      '<input type="file" accept=".pdf, .png, .jpeg, .jpg" multiple style="display:none;">'
     );
     fileInput.on("change", function () {
       const file = this.files[0];
@@ -14,10 +20,15 @@ $(document).ready(function () {
           ["image/png", "image/jpeg", "image/jpg"].includes(file.type)
         ) {
           fileIcon = '<i class="fa-solid fa-file-image file"></i>';
+        } else {
+          alert("檔案格式錯誤");
+          return;
         }
         const uploadedFile = `<div class="uploaded-file" data-file-type="${
           file.type
-        }" data-file-url="${URL.createObjectURL(file)}"><div>${fileIcon}<span>${
+        }" data-file-name="${file.name}" data-file-url="${URL.createObjectURL(
+          file
+        )}"><div>${fileIcon}<span>${
           file.name
         }</span></div><div class="delete-icon"><i class="fa-solid fa-trash-can delete-file"></i></div></div>`;
         $("#uploadedFileList").append(uploadedFile);
@@ -53,6 +64,7 @@ $(document).ready(function () {
     );
     myModal.show();
   });
+
   $("#cancelButton").on("click", function () {
     var cancelModal = new bootstrap.Modal(
       document.getElementById("cancelModal")
@@ -66,33 +78,61 @@ $(document).ready(function () {
     );
     cancelModal.hide();
   });
-
-  $("#uploadForm").on("submit", function (event) {
+  $("#uploadForm").on("submit", async function (event) {
     event.preventDefault();
-    if ($("#uploadedFileList").children().length === 0) {
-      alert("請上傳至少一個文件。");
-      return;
-    }
 
-    const formData = new FormData(this);
-    $("#uploadedFileList .uploaded-file").each(function () {
-      const fileUrl = $(this).data("file-url");
-      formData.append("files[]", fileUrl);
-    });
+    try {
+      const formData = new FormData();
+      formData.append("title", $("#title").val());
+      formData.append("description", $("#description").val());
 
-    $.ajax({
-      url: "api",
-      type: "POST",
-      data: formData,
-      contentType: false,
-      processData: false,
-      success: function (response) {
-        alert("文件上傳成功！");
+      const filePromises = [];
+
+      $(".uploaded-file").each(function () {
+        const fileUrl = $(this).data("file-url");
+        const fileName = $(this).data("file-name");
+
+        if (fileUrl && fileName) {
+          const filePromise = fetch(fileUrl)
+            .then((response) => response.blob())
+            .then((blob) => {
+              formData.append(
+                "files",
+                new File([blob], fileName, { type: blob.type })
+              );
+            });
+
+          filePromises.push(filePromise);
+        }
+      });
+
+      // 等待所有文件處理完成
+      await Promise.all(filePromises);
+
+      // 使用 Promise 包裝 AJAX 請求
+      const response = await new Promise((resolve, reject) => {
+        $.ajax({
+          type: "POST",
+          url: `${window.API_CONFIG.baseUrl}/uploadassessment`,
+          data: formData,
+          contentType: false,
+          processData: false,
+          success: resolve,
+          error: reject,
+        });
+      });
+      if (response.status === "success") {
+        alert("上傳成功");
         window.location.reload();
-      },
-      error: function (xhr, status, error) {
-        alert("文件上傳失敗，請重試。");
-      },
-    });
+      } else {
+        alert("上傳失敗:請再試一次");
+      }
+    } catch (error) {
+      console.error("上傳錯誤:", error);
+      alert("上傳失敗:請再試一次");
+    }
+  });
+  $("#goBack").on("click", function () {
+    window.location.href = "view.html";
   });
 });
