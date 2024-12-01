@@ -1,7 +1,6 @@
 var auth = localStorage.getItem("auth");
 if (auth !== "success") {
-  window.location.href =
-    "http://localhost/20241110/Zhixun/templates/login.html";
+  window.location.href = "login.html";
 }
 $(document).ready(function () {
   $("#navToggler").on("click", function () {
