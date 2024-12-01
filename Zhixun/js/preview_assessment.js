@@ -1,60 +1,119 @@
 $(document).ready(function () {
-  let data = callAPI();
-  fillInfo(data);
+  const iconText = "機電"; // 設置預設值
+  const uploadtext = "查詢估價單紀錄";
+  var previewType = "估價單紀錄";
+  if (typeof BreadcrumbManager !== "undefined") {
+    console.log("1");
+    BreadcrumbManager.updateBreadcrumb(iconText, uploadtext, previewType);
+  }
+  var ass_id = localStorage.getItem("ass_id");
+  const orgdata = JSON.parse(localStorage.getItem("orgdata"));
+  console.log(orgdata);
+  if (orgdata) {
+    if (orgdata[0].edit === 0) {
+      fillInfo(orgdata);
+    } else {
+      console.log(ass_id);
+      $.ajax({
+        url: `${window.API_CONFIG.baseUrl}/assessmentDetail`,
+        type: "GET",
+        data: {
+          ass_id: ass_id,
+        },
+        success: function (response) {
+          console.log("Response data:", response);
+          data = response.data;
+          fillInfo(data);
+        },
+        error: function (error) {
+          console.log("Error fetching files:", error);
+        },
+      });
+    }
+  } else {
+    $.ajax({
+      url: `${window.API_CONFIG.baseUrl}/assessmentDetail`,
+      type: "GET",
+      data: {
+        ass_id: ass_id,
+      },
+      success: function (response) {
+        console.log("Response data:", response);
+        data = response.data;
+        fillInfo(data);
+      },
+      error: function (error) {
+        console.log("Error fetching files:", error);
+      },
+    });
+  }
+  $(".edit-button").on("click", function () {
+    if (ass_id) {
+      localStorage.setItem("ass_id", ass_id);
+      window.location.href = "assessment_edit.html";
+    }
+  });
+  $(".recordType").on("click", function () {
+    window.location.href = "records_assessmentt.html";
+  });
 });
 
-function callAPI() {
-  const data = {
-    title: "我是標題3",
-    uploader: "王小明",
-    uploadInfo: "我是說明3",
-    uploadDate: "2024-09-21",
-    imageFiles: [
-      { url: "../images/night_city.jpg", name: "Night City 1" },
-      { url: "../images/night_city.jpg", name: "Night City 2" },
-      { url: "../images/logo_black.png", name: "Night City 3" },
-      { url: "../images/night_city.jpg", name: "Night City 4" },
-    ],
-    pdfFiles: [
-      { url: "../files/demo.pdf", name: "demo.pdf" },
-      { url: "../files/demo.pdf", name: "demo.pdf" },
-    ],
-  };
-
-  return data;
-
-  $.ajax({
-    url: "/api/getFiles",
-    type: "GET",
-    success: function (response) {},
-    error: function (error) {
-      console.log("Error fetching files:", error);
-    },
-  });
-}
-
 function fillInfo(data) {
+  console.log(data);
+  var date = data[0].date.substring(0, 10);
   // 基本資料
-  $(".upload-title").text(data.title);
-  $(".upload-info").text(data.uploadInfo);
-  $(".uploader").text(data.uploader);
-  $(".upload-date").text(data.uploadDate);
-
-  // 圖片
+  $(".upload-title").text(data[0].ass_title);
+  $(".upload-info").text(data[0].ass_Details);
+  $(".uploader").text(data[0].user);
+  $(".upload-date").text(date);
+  var path = "../../file/assessment/";
   const sliderContainer = $(".slider");
   sliderContainer.empty();
-
-  data.imageFiles.forEach(function (imageFile) {
-    const imageElement = `<img src="${imageFile.url}" alt="${imageFile.name}" class="slider-image">`;
-    sliderContainer.append(imageElement);
-  });
+  const pdfListContainer = $(".uploaded-file");
+  pdfListContainer.empty();
+  if (data[0].edit === 0) {
+    let noteAdded = false;
+    data[0].file_name.forEach(function (File, index) {
+      var floder = File.split(".")[1];
+      var orgpath = "../../file/cache/assessment/";
+      if (floder == "pdf") {
+        const pdfElement = `<li><a href="${orgpath}${floder}/${File}" target="_blank" download>${File} <i class="fa-solid fa-external-link-alt"></i></a></li>`;
+        pdfListContainer.append(pdfElement);
+        if (!noteAdded) {
+          $(".upload-wrapper div").append(
+            '<p class="note">＊ 點擊檔案將自動下載</p>'
+          );
+          noteAdded = true;
+        }
+      } else {
+        floder = "photo";
+        const imageElement = `<img src="${orgpath}${floder}/${File}" alt="${File}" class="slider-image">`;
+        sliderContainer.append(imageElement);
+      }
+    });
+  } else {
+    data[0].file_name.forEach(function (File) {
+      var floder = File.split(".")[1];
+      if (floder == "pdf") {
+        const pdfElement = `<li><a href="${path}${floder}/${File}" target="_blank" download>${File} <i class="fa-solid fa-external-link-alt"></i></a></li>`;
+        pdfListContainer.append(pdfElement);
+        $(".upload-wrapper div").append(
+          '<p class="note">＊ 點擊檔案將自動下載</p>'
+        );
+      } else {
+        floder = "photo";
+        const imageElement = `<img src="${path}${floder}/${File}" alt="${File}" class="slider-image">`;
+        sliderContainer.append(imageElement);
+      }
+    });
+  }
 
   $(".slider").slick({
     dots: true,
     infinite: false,
     centerMode: true,
     speed: 300,
-    slidesToShow: 3,
+    slidesToShow: 1,
     slidesToScroll: 1,
     prevArrow:
       '<button type="button" class="slick-prev"><i class="fa-solid fa-chevron-left"></i></button>',
@@ -62,21 +121,21 @@ function fillInfo(data) {
       '<button type="button" class="slick-next"><i class="fa-solid fa-chevron-right"></i></button>',
   });
 
+  $("#goBack").on("click", function (event) {
+    event.preventDefault();
+    // alert("返回上一頁");
+    window.location.href = "records_assessment.html";
+  });
   var initialImageSrc = $(".slider .slick-current").attr("src");
   $(".image-preview img").attr("src", initialImageSrc);
+  $(document).on("click", ".image-preview img", function () {
+    var imageSrc = $(this).attr("src");
 
-  // pdf文件
-  const pdfListContainer = $(".uploaded-file");
-  pdfListContainer.empty();
-  if (data.pdfFiles.length === 0) {
-    pdfListContainer.append('<li class="no-file">無檔案上傳</li>');
-  } else {
-    data.pdfFiles.forEach(function (pdfFile) {
-      const pdfElement = `<li><a href="${pdfFile.url}" target="_blank" download>${pdfFile.name} <i class="fa-solid fa-external-link-alt"></i></a></li>`;
-      pdfListContainer.append(pdfElement);
-    });
-    $(".upload-wrapper div").append(
-      '<p class="note">＊ 點擊檔案將自動下載</p>'
-    );
-  }
+    var modalContent = `<img src="${imageSrc}" alt="Image Preview" class="img-fluid" />`;
+    $("#filePreviewBody").html(modalContent);
+
+    $("#filePreviewModal").modal("show");
+  });
+  var initialImageSrc = $(".slider .slick-current").attr("src");
+  $(".image-preview img").attr("src", initialImageSrc);
 }
