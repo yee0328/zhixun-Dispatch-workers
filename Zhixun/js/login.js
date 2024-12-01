@@ -16,17 +16,15 @@ $(document).ready(function () {
     const password = $("#password").val();
     $.ajax({
       type: "POST",
-      url: "http://localhost:3000/login",
+      url: `${window.API_CONFIG.baseUrl}/login`,
       data: {
         account: account,
         password: password,
       },
       success: function (response) {
-        console.log(response);
-        if (response.result === "success") {
+        if (response.status === "success") {
           localStorage.setItem("auth", "success");
-          window.location.href =
-            "http://localhost/20241110/Zhixun/templates/index.html";
+          window.location.href = "index.html";
         } else {
           alert("帳號或密碼錯誤");
         }
