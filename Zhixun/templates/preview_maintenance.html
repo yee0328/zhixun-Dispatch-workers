@@ -17,6 +17,7 @@
     <script src="../js/packages/slick.min.js"></script>
     <script src="../js/navbar.js"></script>
     <script src="../js/preview_maintenance.js"></script>
+    <script src="../js/packages/api.js"></script>
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
@@ -58,12 +59,15 @@
                   <div class="file-details">
                     <div class="info">
                       <p>
-                        <strong>上傳標題</strong
-                        ><span class="upload-title"></span>
+                        <strong>類別</strong><span class="upload-title"></span>
                       </p>
                       <p>
-                        <strong>上傳說明</strong
+                        <strong>細項說明</strong
                         ><span class="upload-info"></span>
+                      </p>
+                      <p>
+                        <strong>位置說明</strong
+                        ><span class="postion-info"></span>
                       </p>
                       <p>
                         <strong>上傳人員</strong><span class="uploader"></span>
@@ -86,11 +90,31 @@
                   </div>
                 </div>
               </div>
-              <div class="btn-wrapper">
-                <a href="#" class="button btn-blue edit-button">編輯</a>
-              </div>
             </div>
           </div>
+        </div>
+      </div>
+    </div>
+    <!-- 瀏覽圖片視窗 -->
+    <div
+      class="modal fade"
+      id="filePreviewModal"
+      tabindex="-1"
+      aria-labelledby="filePreviewModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="filePreviewModalLabel">文件預覽</h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body text-center" id="filePreviewBody"></div>
         </div>
       </div>
     </div>
