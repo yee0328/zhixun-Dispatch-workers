@@ -1,4 +1,4 @@
-require("dotenv").config({ path: "./config/env/.env" });
+// require("dotenv").config({ path: "./config/env/.env" });
 
 const Logger = require("../models/plugins/logger");
 

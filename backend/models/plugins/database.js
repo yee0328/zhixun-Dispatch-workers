@@ -7,8 +7,8 @@ async function query(sql, params) {
     // MySQL 連線設定
     const connection = await mysql.createConnection({
       host: "localhost",
-      user: "zhixun",
-      password: "Zx168945", // XAMPP 預設密碼為空
+      user: "root",
+      password: "", // XAMPP 預設密碼為空
       database: "zhixun",
     });
 
