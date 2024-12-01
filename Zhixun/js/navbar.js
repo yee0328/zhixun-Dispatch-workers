@@ -25,21 +25,79 @@ $(document).ready(function () {
           "清潔",
         ];
         dropdownItems.forEach((item) => {
-          dropdownMenu.append(
-            `<li><div class="dropdown-item">${item}</div></li>`
-          );
+          if (item === "機電") {
+            dropdownMenu.append(
+              `<li><div class="beta clickable"><div class="dropdown-item">${item}</div></div></li>`
+            );
+          } else {
+            dropdownMenu.append(
+              `<li><div class="dropdown-item">${item}</div></li>`
+            );
+          }
         });
       }
       dropdownMenu.toggleClass("show");
       fun = $(this).find(".fa-solid").attr("class").split(" ").at(-1);
     });
-    $("#goBack").on("click", function () {
-      window.history.back();
+    $(document).on("click", ".beta", function () {
+      var iconText = $(this).find(".dropdown-item").text();
+      localStorage.setItem("iconText", iconText);
+      if (fun) {
+        window.location.href = `${fun}.html`;
+      } else {
+        // window.location.href = `view.html`;
+      }
     });
-    $(document).on("click", ".dropdown-item", function () {
-      var type = $(this).text();
-      localStorage.setItem("type", type);
-      window.location.href = `${fun}.html`;
+    $(document).on("click", ".view", function () {
+      window.location.href = `view.html`;
     });
   });
+
+  window.BreadcrumbManager = (function () {
+    function updateBreadcrumb(iconText, recordType, previewType, editType) {
+      const newBreadcrumbs = [];
+
+      if (iconText) {
+        newBreadcrumbs.push(
+          $(`<li class="breadcrumb-item view clickable">${iconText}</li>`)
+        );
+      }
+      if (recordType) {
+        newBreadcrumbs.push(
+          $(`<li class="breadcrumb-item recordType">${recordType}</li>`)
+        );
+      }
+      if (previewType) {
+        newBreadcrumbs.push(
+          $(`<li class="breadcrumb-item previewType">${previewType}</li>`)
+        );
+      }
+      if (editType) {
+        newBreadcrumbs.push($(`<li class="breadcrumb-item">${editType}</li>`));
+      }
+
+      if (newBreadcrumbs.length > 0) {
+        const observer = new MutationObserver((mutations) => {
+          mutations.forEach((mutation) => {
+            if (mutation.addedNodes.length) {
+              const breadcrumb = $(".breadcrumb");
+              if (breadcrumb.length > 0) {
+                breadcrumb.append(newBreadcrumbs);
+
+                breadcrumb.find("li").removeClass("active");
+                breadcrumb.find("li").last().addClass("active");
+                breadcrumb.find("li").not(":last").addClass("clickable");
+                observer.disconnect();
+              }
+            }
+          });
+        });
+        observer.observe(document.body, { childList: true, subtree: true });
+      }
+    }
+
+    return {
+      updateBreadcrumb: updateBreadcrumb,
+    };
+  })();
 });
