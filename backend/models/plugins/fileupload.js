@@ -36,6 +36,7 @@ const uploadFiles = async (files, type) => {
           "utf8"
         );
         var folder = fileName.split(".");
+        console.log(folder);
         folder = folder[folder.length - 1];
         if (folder == "pdf") {
           folder = "pdf";
@@ -43,7 +44,7 @@ const uploadFiles = async (files, type) => {
           folder = "photo";
         }
         const filePath = path.join(uploadDir, type, folder, fileName);
-
+        console.log(filePath);
         // 移動檔案到目標目錄
         await fs.writeFile(filePath, file.buffer);
 
@@ -55,7 +56,7 @@ const uploadFiles = async (files, type) => {
         };
       })
     );
-
+    console.log(uploadedFiles);
     return true;
   } catch (error) {
     console.error("檔案上傳失敗:", error);
@@ -111,45 +112,45 @@ const deleteDBFiles = async (files, cache) => {
 };
 const deletecacheFiles = async (files, cache) => {
   try {
-    for (var i = 0; i < files.length; i++) {
-      if (!files[i]) {
-        throw new Error(`檔案名稱不存在於索引 ${i}`);
-      }
-      var folder = files[i].split(".")[1];
-      if (folder == "pdf") {
-        folder = "pdf";
-      } else {
-        folder = "photo";
-      }
-      const filePath = path.join(uploadDir, cache, folder, files[i]);
+    const fullCachePath = path.join(uploadDir);
 
-      // 輸出檔案路徑以供檢查
-      console.log(`檢查檔案路徑: ${filePath}`);
+    // 讀取 cache 目錄下的所有子資料夾
+    const subFolders = ["pdf", "photo"];
+
+    for (const folder of subFolders) {
+      const folderPath = path.join(fullCachePath, cache, folder);
+      console.log(`檢查資料夾: ${folderPath}`);
 
       try {
-        // 檢查檔案是否存在以及是否有讀寫權限
-        await fs.access(
-          filePath,
-          fs.constants.F_OK | fs.constants.R_OK | fs.constants.W_OK
-        );
-        console.log(`檔案存在且有讀寫權限: ${filePath}`);
+        // 讀取資料夾中的所有檔案
+        const files = await fs.readdir(folderPath);
 
-        // 刪除檔案
-        await fs.unlink(filePath);
-        console.log(`檔案已刪除: ${filePath}`);
+        // 刪除每個檔案
+        for (const file of files) {
+          const filePath = path.join(folderPath, file);
+          try {
+            const stat = await fs.stat(filePath);
+            if (stat.isFile()) {
+              // 確保是檔案而不是資料夾
+              await fs.unlink(filePath);
+              console.log(`已刪除檔案: ${filePath}`);
+            }
+          } catch (err) {
+            console.warn(`刪除檔案失敗: ${filePath}`, err);
+          }
+        }
       } catch (err) {
-        if (err.code === "ENOENT") {
-          console.warn(`檔案不存在: ${filePath}`);
-        } else if (err.code === "EACCES" || err.code === "EPERM") {
-          console.error(`沒有權限刪除檔案: ${filePath}`);
-        } else {
-          console.error(`刪除檔案失敗: ${err.message}`);
+        if (err.code !== "ENOENT") {
+          // 忽略資料夾不存在的錯誤
+          console.error(`處理資料夾失敗: ${folderPath}`, err);
         }
       }
     }
+
     return true;
   } catch (err) {
-    throw new Error(`刪除檔案失敗: ${err.message}`);
+    console.error("清理 cache 失敗:", err);
+    throw err;
   }
 };
 

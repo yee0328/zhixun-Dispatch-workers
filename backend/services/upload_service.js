@@ -6,27 +6,49 @@ const database = require("../models/plugins/database.js");
 
 const uploadreceipt = async (title, description, filesname) => {
   try {
-    const date = sys.getSysDateTimeV2();
+    const uniqueFilesname = new Set(filesname);
+    if (uniqueFilesname.size !== filesname.length) {
+      // 找出重複的檔名
+      const duplicateFiles = filesname.filter(
+        (name, index) => filesname.indexOf(name) !== index
+      );
+
+      return {
+        exist: "duplicate",
+        duplicateFiles: duplicateFiles,
+      };
+    }
+    var date = sys.getSysDateTimeV2();
+    var datestr = sys.getTodayDate();
+    console.log("dates" + datestr);
+    console.log("date" + date);
     var rec_id = "";
     const rec_idstr = `SELECT rec_id FROM receipt ORDER BY rec_id DESC LIMIT 1`;
     const checkidparams = [rec_idstr];
     const checkidresult = await database.query(rec_idstr, checkidparams);
+    console.log(checkidresult.length);
     if (checkidresult.length === 0) {
       rec_id = sys.getTodayDate() + "01";
     }
     if (checkidresult.length > 0) {
-      if (date === checkidresult[0].rec_id.substring(0, 8)) {
+      // console.log(checkidresult[0].rec_id.substring(0, 8));
+      console.log(date);
+      console.log(checkidresult[0].rec_id.substring(0, 8));
+      if (datestr === checkidresult[0].rec_id.substring(0, 8)) {
         var serial = checkidresult[0].rec_id.substring(8, 10);
         serial = parseInt(serial) + 1;
         if (serial < 10) {
           rec_id = sys.getTodayDate() + "0" + serial;
+          console.log("0" + rec_id);
         } else {
           rec_id = sys.getTodayDate() + serial;
         }
       } else {
         rec_id = sys.getTodayDate() + "01";
+        console.log("1" + rec_id);
       }
     }
+    // console.log("recid" + rec_id);
     const sqlStr = `INSERT INTO receipt (rec_id,rec_title, rec_Details,user,date) VALUES (?,?, ?, ?,?)`;
     const params = [rec_id, title, description, "admin", date];
     const result = await database.query(sqlStr, params);
@@ -38,9 +60,15 @@ const uploadreceipt = async (title, description, filesname) => {
         const result = await database.query(sqlStr, params);
         if (result.affectedRows !== 1) {
           return false;
-        } else {
-          return true;
         }
+      }
+      if (result.affectedRows !== 1) {
+        return false;
+      } else {
+        return {
+          success: "true",
+          rec_id: rec_id,
+        };
       }
     } else {
       return false;
@@ -53,7 +81,20 @@ const uploadreceipt = async (title, description, filesname) => {
 };
 const uploadassessment = async (title, description, filesname) => {
   try {
-    const date = sys.getSysDateTimeV2();
+    const uniqueFilesname = new Set(filesname);
+    if (uniqueFilesname.size !== filesname.length) {
+      // 找出重複的檔名
+      const duplicateFiles = filesname.filter(
+        (name, index) => filesname.indexOf(name) !== index
+      );
+
+      return {
+        exist: "duplicate",
+        duplicateFiles: duplicateFiles,
+      };
+    }
+    var date = sys.getSysDateTimeV2();
+    var datestr = sys.getTodayDate();
     var ass_id = "";
     const ass_idstr = `SELECT ass_id FROM assessment ORDER BY ass_id DESC LIMIT 1`;
     const checkidparams = [ass_idstr];
@@ -62,8 +103,8 @@ const uploadassessment = async (title, description, filesname) => {
       ass_id = sys.getTodayDate() + "01";
     }
     if (checkidresult.length > 0) {
-      if (date === checkidresult[0].rec_id.substring(0, 8)) {
-        var serial = checkidresult[0].rec_id.substring(8, 10);
+      if (datestr === checkidresult[0].ass_id.substring(0, 8)) {
+        var serial = checkidresult[0].ass_id.substring(8, 10);
         serial = parseInt(serial) + 1;
         if (serial < 10) {
           ass_id = sys.getTodayDate() + "0" + serial;
@@ -91,7 +132,10 @@ const uploadassessment = async (title, description, filesname) => {
       if (result.affectedRows !== 1) {
         return false;
       } else {
-        return true;
+        return {
+          success: "true",
+          ass_id: ass_id,
+        };
       }
     } else {
       return false;
@@ -104,7 +148,20 @@ const uploadassessment = async (title, description, filesname) => {
 };
 const uploadmaintenance = async (type, Detail, postion, filesname) => {
   try {
-    const date = sys.getSysDateTimeV2();
+    const uniqueFilesname = new Set(filesname);
+    if (uniqueFilesname.size !== filesname.length) {
+      // 找出重複的檔名
+      const duplicateFiles = filesname.filter(
+        (name, index) => filesname.indexOf(name) !== index
+      );
+
+      return {
+        exist: "duplicate",
+        duplicateFiles: duplicateFiles,
+      };
+    }
+    var date = sys.getSysDateTimeV2();
+    var datestr = sys.getTodayDate();
     var main_id = "";
     const main_idstr = `SELECT main_id FROM maintenance ORDER BY main_id DESC LIMIT 1`;
     const checkidparams = [main_idstr];
@@ -113,8 +170,8 @@ const uploadmaintenance = async (type, Detail, postion, filesname) => {
       main_id = sys.getTodayDate() + "01";
     }
     if (checkidresult.length > 0) {
-      if (date === checkidresult[0].rec_id.substring(0, 8)) {
-        var serial = checkidresult[0].rec_id.substring(8, 10);
+      if (datestr === checkidresult[0].main_id.substring(0, 8)) {
+        var serial = checkidresult[0].main_id.substring(8, 10);
         serial = parseInt(serial) + 1;
         if (serial < 10) {
           main_id = sys.getTodayDate() + "0" + serial;
@@ -166,28 +223,41 @@ const checkrecstatus = async (id) => {
 };
 const editassessment = async (ass_id, title, description, filesname) => {
   try {
-    const date = sys.getSysDateTimeV2();
-    const editassdata = `UPDATE assessment  SET ass_title=? ,description=? , date=? where ass_id=?`;
+    const uniqueFilesname = new Set(filesname);
+    if (uniqueFilesname.size !== filesname.length) {
+      // 找出重複的檔名
+      const duplicateFiles = filesname.filter(
+        (name, index) => filesname.indexOf(name) !== index
+      );
+      return {
+        exist: "duplicate",
+        duplicateFiles: duplicateFiles,
+      };
+    }
+    var date = sys.getSysDateTimeV2();
+    var datestr = sys.getTodayDate();
+    const editassdata = `UPDATE assessment  SET ass_title=? ,ass_Details=? , date=? where ass_id=?`;
     const params = [title, description, date, ass_id];
     const result = await database.query(editassdata, params);
     if (result.affectedRows == 1) {
-      const deleteFiles = `DELETE assessment FROM rec_file where rec_id=? `;
-      const deleteresule = await database.query(deleteFiles, [rec_id]);
+      const deleteFiles = `DELETE FROM ass_file  where ass_id=? `;
+      const deleteresule = await database.query(deleteFiles, [ass_id]);
       // console.log(deleteresule);
       if (deleteresule.affectedRows >= 1) {
         for (var i = 0; i < filesname.length; i++) {
           var filename = Buffer.from(filesname[i], "latin1").toString("utf8");
-          const sqlStr = `INSERT INTO rec_file (rec_id,file_name) VALUES (?, ?)`;
-          const params = [rec_id, filename];
+          const sqlStr = `INSERT INTO ass_file (ass_id,file_name) VALUES (?, ?)`;
+          const params = [ass_id, filename];
           const result = await database.query(sqlStr, params);
           if (result.affectedRows !== 1) {
             return false;
           }
-          if (result.affectedRows !== 1) {
-            return false;
-          } else {
-            return true;
-          }
+        }
+        // console.log(result.affectedRows);
+        if (result.affectedRows !== 1) {
+          return false;
+        } else {
+          return true;
         }
       }
     } else {
@@ -202,7 +272,20 @@ const editassessment = async (ass_id, title, description, filesname) => {
 };
 const editreceipt = async (rec_id, title, description, filesname) => {
   try {
-    const date = sys.getSysDateTimeV2();
+    const uniqueFilesname = new Set(filesname);
+    if (uniqueFilesname.size !== filesname.length) {
+      // 找出重複的檔名
+      const duplicateFiles = filesname.filter(
+        (name, index) => filesname.indexOf(name) !== index
+      );
+
+      return {
+        exist: "duplicate",
+        duplicateFiles: duplicateFiles,
+      };
+    }
+    var date = sys.getSysDateTimeV2();
+    var datestr = sys.getTodayDate();
     const editassdata = `UPDATE  receipt  SET rec_title=?,rec_Details=?,date=? where rec_id=?`;
     const params = [title, description, date, rec_id];
     const result = await database.query(editassdata, params);
@@ -219,11 +302,11 @@ const editreceipt = async (rec_id, title, description, filesname) => {
           if (result.affectedRows !== 1) {
             return false;
           }
-          if (result.affectedRows !== 1) {
-            return false;
-          } else {
-            return true;
-          }
+        }
+        if (result.affectedRows !== 1) {
+          return false;
+        } else {
+          return true;
         }
       }
     } else {

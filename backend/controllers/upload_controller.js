@@ -3,6 +3,8 @@ const bodyParser = require("body-parser");
 const multer = require("multer");
 const uploadService = require("../services/upload_service");
 const fileUpload = require("../models/plugins/fileupload");
+const { data } = require("../models/plugins/logger");
+// const { exists } = require("fs");
 
 const storage = multer.memoryStorage();
 const upload = multer({
@@ -44,13 +46,21 @@ const uploadreceipt = async (req, res) => {
         description,
         filesname
       );
-      if (result) {
-        const result = await fileUpload.uploadFiles(req.files, "receipt");
+      // console.log(result);
+      if (result.exist === "duplicate") {
+        res.status(httpStatus.OK).send({
+          message: `以下檔案名稱重複: ${result.duplicateFiles.join(", ")}`,
+          status: "fail",
+        });
+      }
+      if (result.success === "true") {
+        const dataresult = await fileUpload.uploadFiles(req.files, "receipt");
 
-        if (result === true) {
+        if (dataresult === true) {
           res.status(httpStatus.OK).send({
             message: "上傳成功",
             status: "success",
+            data: result.rec_id,
           });
         } else {
           res.status(httpStatus.OK).send({
@@ -97,13 +107,23 @@ const uploadassessment = async (req, res) => {
         description,
         filesname
       );
-      if (result) {
-        const result = await fileUpload.uploadFiles(req.files, "assessment");
+      if (result.exist === "duplicate") {
+        res.status(httpStatus.OK).send({
+          message: `以下檔案名稱重複: ${result.duplicateFiles.join(", ")}`,
+          status: "fail",
+        });
+      }
+      if (result.success === "true") {
+        const dataresult = await fileUpload.uploadFiles(
+          req.files,
+          "assessment"
+        );
 
-        if (result === true) {
+        if (dataresult === true) {
           res.status(httpStatus.OK).send({
             message: "上傳成功",
             status: "success",
+            data: result.ass_id,
           });
         } else {
           res.status(httpStatus.OK).send({
@@ -152,9 +172,15 @@ const uploadmaintenance = async (req, res) => {
         postion,
         filesname
       );
-      if (result) {
+      if (result.exist === "duplicate") {
+        res.status(httpStatus.OK).send({
+          message: `以下檔案名稱重複: ${result.duplicateFiles.join(", ")}`,
+          status: "fail",
+        });
+      }
+      if (result === true) {
         const result = await fileUpload.uploadFiles(req.files, "maintenance");
-
+        console.log(result);
         if (result === true) {
           res.status(httpStatus.OK).send({
             message: "上傳成功",
@@ -227,8 +253,14 @@ const editassessment = async (req, res) => {
           description,
           filesname
         );
-        console.log(editassdata);
-        if (editassdata) {
+        if (editassdata.exist === "duplicate") {
+          res.status(httpStatus.OK).send({
+            message: `以下檔案名稱重複: ${result.duplicateFiles.join(", ")}`,
+            status: "fail",
+          });
+        }
+        // console.log(editassdata);
+        if (editassdata === true) {
           const deletefile = await fileUpload.deleteDBFiles(
             //     req.files[i].originalname,
             orgfilename,
@@ -239,17 +271,17 @@ const editassessment = async (req, res) => {
               req.files,
               "assessment"
             );
-          } else {
-            res.status(httpStatus.OK).send({
-              message: "上傳失敗",
-              status: "fail",
-            });
-          }
-          if (result === true) {
-            res.status(httpStatus.OK).send({
-              message: "上傳成功",
-              status: "success",
-            });
+            if (result === true) {
+              res.status(httpStatus.OK).send({
+                message: "上傳成功",
+                status: "success",
+              });
+            } else {
+              res.status(httpStatus.OK).send({
+                message: "上傳失敗",
+                status: "fail",
+              });
+            }
           } else {
             res.status(httpStatus.OK).send({
               message: "上傳失敗",
@@ -321,7 +353,13 @@ const editreceipt = async (req, res) => {
           description,
           filesname
         );
-        if (editrecdata) {
+        if (editrecdata.exist === "duplicate") {
+          res.status(httpStatus.OK).send({
+            message: "請勿上傳重複檔案",
+            status: "fail",
+          });
+        }
+        if (editrecdata === true) {
           const deletefile = await fileUpload.deleteDBFiles(
             orgfilename,
             "receipt"

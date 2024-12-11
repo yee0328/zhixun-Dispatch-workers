@@ -7,7 +7,7 @@ const sys = require("../models/plugins/system.js");
 
 const recordreceipt = async () => {
   try {
-    const recript = `SELECT * FROM receipt ORDER BY date DESC`;
+    const recript = `SELECT * FROM receipt ORDER BY rec_id DESC`;
     const checkrecript = [recript];
     const checkrecriptresult = await database.query(recript, checkrecript);
     // console.log(checkrecriptresult);
@@ -24,7 +24,7 @@ const recordreceipt = async () => {
 };
 const recordassessment = async () => {
   try {
-    const assessment = `SELECT * FROM assessment ORDER BY date DESC`;
+    const assessment = `SELECT * FROM assessment ORDER BY ass_id DESC`;
     const checkassessment = [assessment];
     const checkassessmentresult = await database.query(
       assessment,
@@ -115,7 +115,7 @@ const assessmentDetail = async (ass_id) => {
 };
 const recordmaintenance = async () => {
   try {
-    const maintenance = `SELECT * FROM maintenance ORDER BY date DESC`;
+    const maintenance = `SELECT * FROM maintenance ORDER BY main_id DESC`;
     const checkMainresult = await database.query(maintenance);
     // console.log(checkMainresult);
     if (checkMainresult.length > 0) {
