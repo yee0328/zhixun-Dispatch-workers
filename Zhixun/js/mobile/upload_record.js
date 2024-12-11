@@ -105,6 +105,7 @@ $(document).ready(function () {
     var cancelModal = bootstrap.Modal.getInstance(
       document.getElementById("cancelModal")
     );
+    window.location.href = "index.html";
     cancelModal.hide();
   });
 
