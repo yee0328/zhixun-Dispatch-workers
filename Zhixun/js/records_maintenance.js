@@ -8,6 +8,9 @@ $(document).ready(function () {
   $(".recordtext").on("click", function () {
     window.location.href = "records_maintenance.html";
   });
+  $(".fa-chevron-left").on("click", function () {
+    window.location.href = "view.html";
+  });
   callAPI()
     .then((data) => {
       // console.log(data);
@@ -20,12 +23,13 @@ $(document).ready(function () {
       const tableBody = $("#records-table tbody");
       tableBody.empty();
       data.forEach(function (record) {
-        // console.log(record);
-        var date = record.date.substring(0, 10);
+        var date = new Date(record.date);
+        date.setDate(date.getDate() + 1);
+        var formattedDate = date.toISOString().substring(0, 10);
         const row = `<tr data-link="${record.main_id}">
                             <td>${record.main_class}</td>
                             <td>${record.user}</td>
-                            <td>${date}</td>
+                            <td>${formattedDate}</td>
                          </tr>`;
         tableBody.append(row);
       });
@@ -71,7 +75,22 @@ $(document).ready(function () {
           const title = data[0];
           const dateInRange = date >= startDate && date <= endDate;
           const categoryMatch = !category || title.includes(category);
-          return dateInRange && categoryMatch;
+          if (
+            startDate.toString() === "Invalid Date" &&
+            endDate.toString() === "Invalid Date"
+          ) {
+            // 只有 category 時
+            return categoryMatch;
+          } else if (
+            startDate.toString() === "Invalid Date" ||
+            endDate.toString() === "Invalid Date"
+          ) {
+            // 只有一個日期無效時
+            return categoryMatch;
+          } else {
+            // 日期範圍和 category 都存在時
+            return dateInRange && categoryMatch;
+          }
         });
 
         table.draw();

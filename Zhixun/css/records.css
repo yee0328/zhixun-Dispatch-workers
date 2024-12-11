@@ -120,7 +120,18 @@ table.dataTable tbody tr:last-child td:last-child {
     background: var(--white);
     color: var(--black) !important;
 }
+#main-content .back-container { 
+    padding: 1em 0;
+}
 
+#main-content .back-container a {
+    color: var(--black);
+    transition: hover .5s;
+}
+
+#main-content .back-container a:hover {
+    font-weight: 700;
+}
 /* #records-table .paginate_button.current, #records-table .paginate_button.current:hover{
     border: none;
     background-color: transparent;

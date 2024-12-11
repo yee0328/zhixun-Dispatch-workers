@@ -1,11 +1,14 @@
 $(document).ready(function () {
-  const orgdata = JSON.parse(localStorage.getItem("orgdata"));
+  var orgdata = JSON.parse(localStorage.getItem("orgdata")) || [];
   const iconText = "機電"; // 設置預設值
   const recordtext = "查詢發票";
   if (typeof BreadcrumbManager !== "undefined") {
     console.log("1");
     BreadcrumbManager.updateBreadcrumb(iconText, recordtext);
   }
+  $(".fa-chevron-left").on("click", function () {
+    window.location.href = "view.html";
+  });
   callAPI()
     .then((data) => {
       // console.log(data);
@@ -18,35 +21,38 @@ $(document).ready(function () {
       // 建立table
       const tableBody = $("#records-table tbody");
       tableBody.empty();
-      data.forEach(function (record) {
-        if (orgdata) {
-          if (orgdata[0].edit == 0) {
-            if (record.rec_id == orgdata[0].rec_id) {
-              var date = orgdata[0].date.substring(0, 10);
-              console.log(orgdata[0]);
-              const row = `<tr data-link="${orgdata[0].rec_id}">
-                              <td>${orgdata[0].rec_title}</td>
-                              <td>${orgdata[0].user}</td>
-                              <td>${date}</td>
-                           </tr>`;
-              tableBody.append(row);
-            } else {
-              var date = record.date.substring(0, 10);
-              const row = `<tr data-link="${record.rec_id}">
-                            <td>${record.rec_title}</td>
-                            <td>${record.user}</td>
-                            <td>${date}</td>
-                         </tr>`;
-              tableBody.append(row);
-            }
-          }
-        } else {
-          var date = record.date.substring(0, 10);
+      const processedIds = new Set(); // 追蹤已處理的 ID
+      const reversedOrgData = [...orgdata].reverse();
+
+      // 先處理 orgdata 的資料
+      reversedOrgData.forEach((item) => {
+        processedIds.add(item.rec_id);
+
+        var date = new Date(item.date);
+        date.setDate(date.getDate() + 1);
+        var formattedDate = date.toISOString().substring(0, 10);
+
+        const row = `<tr data-link="${item.rec_id}">
+      <td>${item.rec_title}</td>
+      <td>${item.user}</td>
+      <td>${formattedDate}</td>
+    </tr>`;
+        tableBody.append(row);
+      });
+
+      // 再處理 API 資料，但只處理未出現過的 ID
+      data.forEach((record) => {
+        if (!processedIds.has(record.rec_id)) {
+          var date = new Date(record.date);
+          date.setDate(date.getDate() + 1);
+          var formattedDate = date.toISOString().substring(0, 10);
+
           const row = `<tr data-link="${record.rec_id}">
-                            <td>${record.rec_title}</td>
-                            <td>${record.user}</td>
-                            <td>${date}</td>
-                         </tr>`;
+      <td>${record.rec_title}</td>
+      <td>${record.user}</td>
+      <td>${formattedDate}</td>
+    </tr>`;
+
           tableBody.append(row);
         }
       });

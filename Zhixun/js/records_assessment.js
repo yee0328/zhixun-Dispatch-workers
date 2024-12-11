@@ -1,5 +1,5 @@
 $(document).ready(function () {
-  const orgdata = JSON.parse(localStorage.getItem("orgdata"));
+  var orgdata = JSON.parse(localStorage.getItem("orgdata")) || [];
   const iconText = "機電"; // 設置預設值
   const recordtext = "查詢估價單紀錄";
   if (typeof BreadcrumbManager !== "undefined") {
@@ -9,7 +9,9 @@ $(document).ready(function () {
   $(".recordtext").on("click", function () {
     window.location.href = "records_assessment.html";
   });
-
+  $(".fa-chevron-left").on("click", function () {
+    window.location.href = "view.html";
+  });
   callAPI()
     .then((data) => {
       // console.log(data);
@@ -21,37 +23,40 @@ $(document).ready(function () {
       // 建立table
       const tableBody = $("#records-table tbody");
       tableBody.empty();
-      data.forEach(function (record) {
-        // console.log(record);
-        console.log(orgdata);
-        if (orgdata) {
-          if (orgdata[0].edit == 0) {
-            if (record.ass_id == orgdata[0].ass_id) {
-              console.log(record.ass_id);
-              var date = orgdata[0].date.substring(0, 10);
-              const row = `<tr data-link="${orgdata[0].ass_id}">
-                              <td>${orgdata[0].ass_title}</td>
-                              <td>${orgdata[0].user}</td>
-                              <td>${date}</td>
-                           </tr>`;
-              tableBody.append(row);
-            } else {
-              var date = record.date.substring(0, 10);
-              const row = `<tr data-link="${record.ass_id}">
-                            <td>${record.ass_title}</td>
-                            <td>${record.user}</td>
-                            <td>${date}</td>
-                         </tr>`;
-              tableBody.append(row);
-            }
-          }
-        } else {
-          var date = record.date.substring(0, 10);
+      // 先處理 orgdata (從最新到最舊)
+      const processedIds = new Set(); // 追蹤已處理的 ID
+      const reversedOrgData = [...orgdata].reverse();
+
+      // 先處理 orgdata 的資料
+      reversedOrgData.forEach((item) => {
+        processedIds.add(item.ass_id);
+
+        var date = new Date(item.date);
+        date.setDate(date.getDate() + 1);
+        var formattedDate = date.toISOString().substring(0, 10);
+
+        const row = `<tr data-link="${item.ass_id}">
+      <td>${item.ass_title}</td>
+      <td>${item.user}</td>
+      <td>${formattedDate}</td>
+    </tr>`;
+
+        tableBody.append(row);
+      });
+
+      // 再處理 API 資料，但只處理未出現過的 ID
+      data.forEach((record) => {
+        if (!processedIds.has(record.ass_id)) {
+          var date = new Date(record.date);
+          date.setDate(date.getDate() + 1);
+          var formattedDate = date.toISOString().substring(0, 10);
+
           const row = `<tr data-link="${record.ass_id}">
-                            <td>${record.ass_title}</td>
-                            <td>${record.user}</td>
-                            <td>${date}</td>
-                         </tr>`;
+      <td>${record.ass_title}</td>
+      <td>${record.user}</td>
+      <td>${formattedDate}</td>
+    </tr>`;
+
           tableBody.append(row);
         }
       });
