@@ -29,14 +29,16 @@ $(document).ready(function () {
 });
 
 function fillInfo(data) {
-  console.log(data);
-  var date = data[0].date.substring(0, 10);
+  var date = new Date(data[0].date);
+  date.setDate(date.getDate() + 1);
+  var formattedDate = date.toISOString().substring(0, 10);
+
   // 基本資料
   $(".upload-title").text(data[0].main_class);
   $(".upload-info").text(data[0].main_Detail);
   $(".postion-info").text(data[0].main_postion);
   $(".uploader").text(data[0].user);
-  $(".upload-date").text(date);
+  $(".upload-date").text(formattedDate);
   var path = "../../file/maintenance/";
   $(".slider").on("afterChange", function (event, slick, currentSlide) {
     var currentImageSrc = $(".slider .slick-current ").attr("src");
