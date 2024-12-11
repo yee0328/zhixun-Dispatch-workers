@@ -1,25 +1,27 @@
-//刪快取資料夾裡的檔案
+// 刪快取資料夾裡的檔案
 const orgdata = JSON.parse(localStorage.getItem("orgdata"));
-// console.log(orgdata[0].file_name);
 
-if (orgdata) {
-  if (orgdata[0].edit === 0) {
-    const file_name = orgdata[0].file_name;
-    const floder = orgdata[0].floder;
-    $.ajax({
-      url: `${window.API_CONFIG.baseUrl}/deletecache`,
-      type: "POST",
-      data: "file_name=" + file_name + "&floder=" + floder,
+if (orgdata && Array.isArray(orgdata) && orgdata.length > 0) {
+  orgdata.forEach((item) => {
+    if (item && item.file_name && item.floder) {
+      $.ajax({
+        url: `${window.API_CONFIG.baseUrl}/deletecache`,
+        type: "POST",
+        data: {
+          file_name: item.file_name.join(","),
+          floder: item.floder,
+        },
+        success: function (response) {
+          console.log("Response data:", response);
+        },
+        error: function (error) {
+          console.log("Error fetching files:", error);
+        },
+      });
+    }
+  });
 
-      success: function (response) {
-        console.log("Response data:", response);
-      },
-      error: function (error) {
-        console.log("Error fetching files:", error);
-      },
-    });
-    localStorage.removeItem("orgdata");
-  }
+  localStorage.removeItem("orgdata");
 }
 $(document).ready(function () {
   const iconText = "機電"; // 設置預設值
