@@ -23,6 +23,6 @@ $(document).ready(function () {
   // });
   $(".selection").on("click", function () {
     var id = $(this).find(".fa-solid").attr("id");
-    window.location.href = `http://localhost/20241110/Zhixun/templates/mobile/${id}.html`;
+    window.location.href = `${id}.html`;
   });
 });
