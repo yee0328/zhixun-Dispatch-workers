@@ -13,14 +13,18 @@ $(document).ready(function () {
     );
   }
   var ass_id = localStorage.getItem("ass_id");
-  const orgdata = JSON.parse(localStorage.getItem("orgdata"));
-  if (orgdata) {
+  var orgdata = JSON.parse(localStorage.getItem("orgdata")) || [];
+  var currentData = orgdata.filter(
+    (data) => data.ass_id === ass_id && data.edit === 0
+  );
+  console.log(currentData.length);
+  if (currentData.length > 0) {
     var path = "../../file/cache/assessment/";
-    $("#title").val(orgdata[0].ass_title);
-    $("#description").val(orgdata[0].ass_Details);
-    $("#uploadedCount").text(orgdata[0].file_name.length);
-    console.log(orgdata[0].file_name.length);
-    orgdata[0].file_name.forEach(function (File) {
+    $("#title").val(currentData[0].ass_title);
+    $("#description").val(currentData[0].ass_Details);
+    $("#uploadedCount").text(currentData[0].file_name.length);
+    // console.log(currentData.file_name.length);
+    currentData[0].file_name.forEach(function (File) {
       var floder = File.split(".")[1];
       let fileIcon = '<i class="fa-solid fa-file file"></i>';
       if (floder === "pdf") {
@@ -32,7 +36,7 @@ $(document).ready(function () {
         return;
       }
       if (floder === "pdf") {
-        const uploadedFile = `<div class="uploaded-file" data-file-type="${floder} data-file-url="${path}${floder}/${File}"
+        const uploadedFile = `<div class="uploaded-file" data-file-type="pdf" data-file-url="${path}pdf/${File}"
         data-file-name="${File}"><div>${fileIcon}<span>${File}</span></div><div class="delete-icon"><i class="fa-solid fa-trash-can delete-file"></i></div></div>`;
         $("#uploadedFileList").append(uploadedFile);
       } else {
@@ -69,13 +73,13 @@ $(document).ready(function () {
             return;
           }
           if (floder === "pdf") {
-            const uploadedFile = `<div class="uploaded-file" data-file-type="${floder} data-file-url="${path}${floder}/${File}"
-          data-file-name="${File}"><div>${fileIcon}<span>${File}</span></div><div class="delete-icon"><i class="fa-solid fa-trash-can delete-file"></i></div></div>`;
+            const uploadedFile = `<div class="uploaded-file" data-file-type="pdf" data-file-url="${path}pdf/${File}"
+            data-file-name="${File}"><div>${fileIcon}<span>${File}</span></div><div class="delete-icon"><i class="fa-solid fa-trash-can delete-file"></i></div></div>`;
             $("#uploadedFileList").append(uploadedFile);
           } else {
             floder = "photo";
             const uploadedFile = `<div class="uploaded-file" data-file-type="${floder}" data-file-url="${path}${floder}/${File}"
-          data-file-name="${File}"><div>${fileIcon}<span>${File}</span></div><div class="delete-icon"><i class="fa-solid fa-trash-can delete-file"></i></div></div>`;
+            data-file-name="${File}"><div>${fileIcon}<span>${File}</span></div><div class="delete-icon"><i class="fa-solid fa-trash-can delete-file"></i></div></div>`;
             $("#uploadedFileList").append(uploadedFile);
           }
         });
@@ -90,29 +94,31 @@ $(document).ready(function () {
       '<input type="file" accept=".pdf, .png, .jpeg, .jpg" multiple style="display:none;">'
     );
     fileInput.on("change", function () {
-      const file = this.files[0];
-      if (file) {
-        let fileIcon = '<i class="fa-solid fa-file file"></i>';
-        if (file.type === "application/pdf") {
-          fileIcon = '<i class="fa-solid fa-file-pdf file"></i>';
-        } else if (
-          ["image/png", "image/jpeg", "image/jpg"].includes(file.type)
-        ) {
-          fileIcon = '<i class="fa-solid fa-file-image file"></i>';
-        } else {
-          alert("檔案格式錯誤");
-          return;
-        }
-        const uploadedFile = `<div class="uploaded-file" data-file-type="${
-          file.type
-        }" data-file-name="${file.name}" data-file-url="${URL.createObjectURL(
-          file
-        )}"><div>${fileIcon}<span>${
-          file.name
-        }</span></div><div class="delete-icon"><i class="fa-solid fa-trash-can delete-file"></i></div></div>`;
-        $("#uploadedFileList").append(uploadedFile);
+      const files = this.files;
+      if (files.length > 0) {
+        Array.from(files).forEach((file) => {
+          let fileIcon = '<i class="fa-solid fa-file file"></i>';
+          if (file.type === "application/pdf") {
+            fileIcon = '<i class="fa-solid fa-file-pdf file"></i>';
+          } else if (
+            ["image/png", "image/jpeg", "image/jpg"].includes(file.type)
+          ) {
+            fileIcon = '<i class="fa-solid fa-file-image file"></i>';
+          } else {
+            alert("檔案格式錯誤");
+            return;
+          }
+          const uploadedFile = `<div class="uploaded-file" data-file-type="${
+            file.type
+          }" data-file-name="${file.name}" data-file-url="${URL.createObjectURL(
+            file
+          )}"><div>${fileIcon}<span>${
+            file.name
+          }</span></div><div class="delete-icon"><i class="fa-solid fa-trash-can delete-file"></i></div></div>`;
+          $("#uploadedFileList").append(uploadedFile);
+        });
         const currentCount = parseInt($("#uploadedCount").text(), 10);
-        $("#uploadedCount").text(currentCount + 1);
+        $("#uploadedCount").text(currentCount + files.length);
       }
     });
     fileInput.click();
@@ -163,6 +169,7 @@ $(document).ready(function () {
     var cancelModal = bootstrap.Modal.getInstance(
       document.getElementById("cancelModal")
     );
+    window.location.href = "preview_assessment.html";
     cancelModal.hide();
   });
   $("#uploadForm").on("submit", async function (event) {
@@ -171,7 +178,6 @@ $(document).ready(function () {
     try {
       console.log($("#title").val());
       const file_name = [];
-      const orgdata = [];
       const formData = new FormData();
       formData.append("title", $("#title").val());
       formData.append("description", $("#description").val());
@@ -211,17 +217,31 @@ $(document).ready(function () {
           error: reject,
         });
       });
+      console.log(response);
       if (response.status === "success") {
-        orgdata.push({
+        //刪除同ID的資料，這樣在record才可以正確排序
+        orgdata = orgdata.filter((data) => data.ass_id !== ass_id);
+        // 因為資料庫時間為UTC+0，在其他頁面會加一天，所以這裡要減一天
+        const newDate = new Date();
+        const formattedDate = `${newDate.getFullYear()}-${String(
+          newDate.getMonth() + 1
+        ).padStart(2, "0")}-${String(newDate.getDate() - 1).padStart(
+          2,
+          "0"
+        )}T16:00:00`;
+        const newData = {
           ass_id: ass_id,
-          ass_title: $("#title").val(),
           floder: "assessment",
+          ass_title: $("#title").val(),
           user: "admin",
           ass_Details: $("#description").val(),
-          date: new Date().toISOString().split("T")[0], // 當前日期
+          date: formattedDate,
           file_name: file_name,
           edit: response.data,
-        });
+        };
+
+        orgdata.push(newData);
+        // 更新 localStorage
         localStorage.setItem("orgdata", JSON.stringify(orgdata));
         window.location.href = "preview_assessment.html";
       } else {
@@ -236,10 +256,16 @@ $(document).ready(function () {
     event.preventDefault();
     window.location.href = "preview_assessment.html";
   });
-  $(".recordType").on("click", function () {
-    window.location.href = "records_assessmentt.html";
+  // $(".recordType").on("click", function () {
+  //   window.location.href = "records_assessmentt.html";
+  // });
+  // $(".previewType").on("click", function () {
+  //   window.location.href = "preview_assessmentt.html";
+  // });
+  $(document).on("click", ".previewType", function () {
+    window.location.href = "preview_assessment.html";
   });
-  $(".previewType").on("click", function () {
-    window.location.href = "preview_assessmentt.html";
+  $(document).on("click", ".recordType", function () {
+    window.location.href = "records_assessment.html";
   });
 });

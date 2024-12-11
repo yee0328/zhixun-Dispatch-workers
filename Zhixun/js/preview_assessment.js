@@ -7,29 +7,10 @@ $(document).ready(function () {
     BreadcrumbManager.updateBreadcrumb(iconText, uploadtext, previewType);
   }
   var ass_id = localStorage.getItem("ass_id");
-  const orgdata = JSON.parse(localStorage.getItem("orgdata"));
-  console.log(orgdata);
-  if (orgdata) {
-    if (orgdata[0].edit === 0) {
-      fillInfo(orgdata);
-    } else {
-      console.log(ass_id);
-      $.ajax({
-        url: `${window.API_CONFIG.baseUrl}/assessmentDetail`,
-        type: "GET",
-        data: {
-          ass_id: ass_id,
-        },
-        success: function (response) {
-          console.log("Response data:", response);
-          data = response.data;
-          fillInfo(data);
-        },
-        error: function (error) {
-          console.log("Error fetching files:", error);
-        },
-      });
-    }
+  var orgdata = JSON.parse(localStorage.getItem("orgdata")) || [];
+  var currentData = orgdata.filter((data) => data.ass_id === ass_id);
+  if (currentData.length > 0) {
+    fillInfo(currentData);
   } else {
     $.ajax({
       url: `${window.API_CONFIG.baseUrl}/assessmentDetail`,
@@ -54,18 +35,19 @@ $(document).ready(function () {
     }
   });
   $(".recordType").on("click", function () {
-    window.location.href = "records_assessmentt.html";
+    window.location.href = "records_assessment.html";
   });
 });
 
 function fillInfo(data) {
-  console.log(data);
-  var date = data[0].date.substring(0, 10);
+  var date = new Date(data[0].date);
+  date.setDate(date.getDate() + 1);
+  var formattedDate = date.toISOString().substring(0, 10);
   // 基本資料
   $(".upload-title").text(data[0].ass_title);
   $(".upload-info").text(data[0].ass_Details);
   $(".uploader").text(data[0].user);
-  $(".upload-date").text(date);
+  $(".upload-date").text(formattedDate);
   var path = "../../file/assessment/";
   const sliderContainer = $(".slider");
   sliderContainer.empty();
@@ -92,14 +74,18 @@ function fillInfo(data) {
       }
     });
   } else {
+    let noteAdded = false;
     data[0].file_name.forEach(function (File) {
       var floder = File.split(".")[1];
       if (floder == "pdf") {
         const pdfElement = `<li><a href="${path}${floder}/${File}" target="_blank" download>${File} <i class="fa-solid fa-external-link-alt"></i></a></li>`;
         pdfListContainer.append(pdfElement);
-        $(".upload-wrapper div").append(
-          '<p class="note">＊ 點擊檔案將自動下載</p>'
-        );
+        if (!noteAdded) {
+          $(".upload-wrapper div").append(
+            '<p class="note">＊ 點擊檔案將自動下載</p>'
+          );
+          noteAdded = true;
+        }
       } else {
         floder = "photo";
         const imageElement = `<img src="${path}${floder}/${File}" alt="${File}" class="slider-image">`;
@@ -120,12 +106,6 @@ function fillInfo(data) {
     nextArrow:
       '<button type="button" class="slick-next"><i class="fa-solid fa-chevron-right"></i></button>',
   });
-
-  $("#goBack").on("click", function (event) {
-    event.preventDefault();
-    // alert("返回上一頁");
-    window.location.href = "records_assessment.html";
-  });
   var initialImageSrc = $(".slider .slick-current").attr("src");
   $(".image-preview img").attr("src", initialImageSrc);
   $(document).on("click", ".image-preview img", function () {
@@ -136,6 +116,10 @@ function fillInfo(data) {
 
     $("#filePreviewModal").modal("show");
   });
-  var initialImageSrc = $(".slider .slick-current").attr("src");
-  $(".image-preview img").attr("src", initialImageSrc);
+
+  $("#goBack").on("click", function (event) {
+    event.preventDefault();
+    // alert("返回上一頁");
+    window.location.href = "records_assessment.html";
+  });
 }

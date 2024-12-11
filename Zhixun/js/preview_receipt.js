@@ -6,32 +6,12 @@ $(document).ready(function () {
     console.log("1");
     BreadcrumbManager.updateBreadcrumb(iconText, uploadtext, previewType);
   }
-  const orgdata = JSON.parse(localStorage.getItem("orgdata"));
-  if (orgdata) {
-    if (orgdata[0].edit === 0) {
-      fillInfo(orgdata);
-    } else {
-      var rec_id = localStorage.getItem("recid");
-      console.log(rec_id);
-      $.ajax({
-        url: `${window.API_CONFIG.baseUrl}/receiptDetail`,
-        type: "GET",
-        data: {
-          rec_id: rec_id,
-        },
-        success: function (response) {
-          console.log("Response data:", response);
-          data = response.data;
-          fillInfo(data);
-        },
-        error: function (error) {
-          console.log("Error fetching files:", error);
-        },
-      });
-    }
+  var rec_id = localStorage.getItem("recid");
+  var orgdata = JSON.parse(localStorage.getItem("orgdata")) || [];
+  var currentData = orgdata.filter((data) => data.rec_id === rec_id);
+  if (currentData.length > 0) {
+    fillInfo(currentData);
   } else {
-    var rec_id = localStorage.getItem("recid");
-    console.log(rec_id);
     $.ajax({
       url: `${window.API_CONFIG.baseUrl}/receiptDetail`,
       type: "GET",
@@ -60,13 +40,15 @@ $(document).ready(function () {
 });
 
 function fillInfo(data) {
-  console.log(data);
-  var date = data[0].date.substring(0, 10);
+  console.log("Data:", data);
+  var date = new Date(data[0].date);
+  date.setDate(date.getDate() + 1);
+  var formattedDate = date.toISOString().substring(0, 10);
   // 基本資料
   $(".upload-title").text(data[0].rec_title);
   $(".upload-info").text(data[0].rec_Details);
   $(".uploader").text(data[0].user);
-  $(".upload-date").text(date);
+  $(".upload-date").text(formattedDate);
   var path = "../../file/receipt/";
   $(".slider").on("afterChange", function (event, slick, currentSlide) {
     var currentImageSrc = $(".slider .slick-current ").attr("src");
@@ -100,14 +82,18 @@ function fillInfo(data) {
   } else {
     console.log(data[0].file_name);
     console.log(data[0].file_name.length);
+    let noteAdded = false;
     data[0].file_name.forEach(function (File) {
       var floder = File.split(".")[1];
       if (floder == "pdf") {
         const pdfElement = `<li><a href="${path}${floder}/${File}" target="_blank" download>${File} <i class="fa-solid fa-external-link-alt"></i></a></li>`;
         pdfListContainer.append(pdfElement);
-        $(".upload-wrapper div").append(
-          '<p class="note">＊ 點擊檔案將自動下載</p>'
-        );
+        if (!noteAdded) {
+          $(".upload-wrapper div").append(
+            '<p class="note">＊ 點擊檔案將自動下載</p>'
+          );
+          noteAdded = true;
+        }
       } else {
         floder = "photo";
         const imageElement = `<img src="${path}${floder}/${File}" alt="${File}" class="slider-image">`;

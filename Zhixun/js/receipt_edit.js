@@ -13,14 +13,18 @@ $(document).ready(function () {
     );
   }
   var rec_id = localStorage.getItem("recid");
-  const orgdata = JSON.parse(localStorage.getItem("orgdata"));
-  if (orgdata) {
-    var path = "../../file/cache/assessment/";
-    $("#title").val(orgdata[0].ass_title);
-    $("#description").val(orgdata[0].ass_Details);
-    $("#uploadedCount").text(orgdata[0].file_name.length);
-    console.log(orgdata[0].file_name.length);
-    orgdata[0].file_name.forEach(function (File) {
+  var orgdata = JSON.parse(localStorage.getItem("orgdata")) || [];
+  var currentData = orgdata.filter(
+    (data) => data.rec_id === rec_id && data.edit === 0
+  );
+
+  if (currentData.length > 0) {
+    var path = "../../file/cache/receipt/";
+    $("#title").val(currentData[0].rec_title);
+    $("#description").val(currentData[0].rec_Details);
+    $("#uploadedCount").text(currentData[0].file_name.length);
+    // console.log(currentData[0].file_name.length);
+    currentData[0].file_name.forEach(function (File) {
       var floder = File.split(".")[1];
       let fileIcon = '<i class="fa-solid fa-file file"></i>';
       if (floder === "pdf") {
@@ -90,29 +94,31 @@ $(document).ready(function () {
       '<input type="file" accept=".pdf, .png, .jpeg, .jpg" multiple style="display:none;">'
     );
     fileInput.on("change", function () {
-      const file = this.files[0];
-      if (file) {
-        let fileIcon = '<i class="fa-solid fa-file file"></i>';
-        if (file.type === "application/pdf") {
-          fileIcon = '<i class="fa-solid fa-file-pdf file"></i>';
-        } else if (
-          ["image/png", "image/jpeg", "image/jpg"].includes(file.type)
-        ) {
-          fileIcon = '<i class="fa-solid fa-file-image file"></i>';
-        } else {
-          alert("檔案格式錯誤");
-          return;
-        }
-        const uploadedFile = `<div class="uploaded-file" data-file-type="${
-          file.type
-        }" data-file-name="${file.name}" data-file-url="${URL.createObjectURL(
-          file
-        )}"><div>${fileIcon}<span>${
-          file.name
-        }</span></div><div class="delete-icon"><i class="fa-solid fa-trash-can delete-file"></i></div></div>`;
-        $("#uploadedFileList").append(uploadedFile);
+      const files = this.files;
+      if (files.length > 0) {
+        Array.from(files).forEach((file) => {
+          let fileIcon = '<i class="fa-solid fa-file file"></i>';
+          if (file.type === "application/pdf") {
+            fileIcon = '<i class="fa-solid fa-file-pdf file"></i>';
+          } else if (
+            ["image/png", "image/jpeg", "image/jpg"].includes(file.type)
+          ) {
+            fileIcon = '<i class="fa-solid fa-file-image file"></i>';
+          } else {
+            alert("檔案格式錯誤");
+            return;
+          }
+          const uploadedFile = `<div class="uploaded-file" data-file-type="${
+            file.type
+          }" data-file-name="${file.name}" data-file-url="${URL.createObjectURL(
+            file
+          )}"><div>${fileIcon}<span>${
+            file.name
+          }</span></div><div class="delete-icon"><i class="fa-solid fa-trash-can delete-file"></i></div></div>`;
+          $("#uploadedFileList").append(uploadedFile);
+        });
         const currentCount = parseInt($("#uploadedCount").text(), 10);
-        $("#uploadedCount").text(currentCount + 1);
+        $("#uploadedCount").text(currentCount + files.length);
       }
     });
     fileInput.click();
@@ -163,6 +169,7 @@ $(document).ready(function () {
     var cancelModal = bootstrap.Modal.getInstance(
       document.getElementById("cancelModal")
     );
+    window.location.href = "preview_receipt.html";
     cancelModal.hide();
   });
   $("#uploadForm").on("submit", async function (event) {
@@ -172,7 +179,6 @@ $(document).ready(function () {
       // console.log($("#title").val());
       const file_name = [];
       const file_url = [];
-      const orgdata = [];
       const formData = new FormData();
       formData.append("title", $("#title").val());
       formData.append("description", $("#description").val());
@@ -215,16 +221,31 @@ $(document).ready(function () {
       });
       console.log(response.data);
       if (response.status === "success") {
-        orgdata.push({
+        orgdata = orgdata.filter((data) => data.rec_id !== rec_id);
+        // 因為資料庫時間為UTC+0，在其他頁面會加一天，所以這裡要減一天
+        const newDate = new Date();
+        const formattedDate = `${newDate.getFullYear()}-${String(
+          newDate.getMonth() + 1
+        ).padStart(2, "0")}-${String(newDate.getDate() - 1).padStart(
+          2,
+          "0"
+        )}T16:00:00`;
+
+        // 準備新的資料
+        const newData = {
           rec_id: rec_id,
           floder: "receipt",
           rec_title: $("#title").val(),
           user: "admin",
           rec_Details: $("#description").val(),
-          date: new Date().toISOString().split("T")[0], // 當前日期
+          date: formattedDate,
           file_name: file_name,
           edit: response.data,
-        });
+        };
+
+        orgdata.push(newData);
+
+        // 更新 localStorage
         localStorage.setItem("orgdata", JSON.stringify(orgdata));
         window.location.href = "preview_receipt.html";
       } else {
@@ -238,30 +259,4 @@ $(document).ready(function () {
   $("#goBack").on("click", function () {
     window.location.href = "preview_receipt.html";
   });
-  //   const fileInput = $(
-  //     '<input type="file" accept=".pdf, .png, .jpeg, .jpg" style="display:none;">'
-  //   );
-  //   fileInput.on("change", function () {
-  //     const file = this.files[0];
-  //     if (file) {
-  //       let fileIcon = '<i class="fa-solid fa-file file"></i>';
-  //       if (file.type === "application/pdf") {
-  //         fileIcon = '<i class="fa-solid fa-file-pdf file"></i>';
-  //       } else if (
-  //         ["image/png", "image/jpeg", "image/jpg"].includes(file.type)
-  //       ) {
-  //         fileIcon = '<i class="fa-solid fa-file-image file"></i>';
-  //       }
-  //       const uploadedFile = `<div class="uploaded-file" data-file-type="${
-  //         file.type
-  //       }" data-file-url="${URL.createObjectURL(file)}"><div>${fileIcon}<span>${
-  //         file.name
-  //       }</span></div><div class="delete-icon"><i class="fa-solid fa-trash-can delete-file"></i></div></div>`;
-  //       $("#uploadedFileList").append(uploadedFile);
-  //       const currentCount = parseInt($("#uploadedCount").text(), 10);
-  //       $("#uploadedCount").text(currentCount + 1);
-  //     }
-  //   });
-  //   fileInput.click();
-  // });
 });

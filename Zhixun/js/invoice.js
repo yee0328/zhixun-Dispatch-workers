@@ -5,35 +5,38 @@ $(document).ready(function () {
     console.log("1");
     BreadcrumbManager.updateBreadcrumb(iconText, uploadtext);
   }
-
+  var orgdata = JSON.parse(localStorage.getItem("orgdata")) || [];
+  var rec_id = "";
   $("#uploadBox").on("click", function () {
     const fileInput = $(
       '<input type="file" accept=".pdf, .png, .jpeg, .jpg" multiple style="display:none;">'
     );
     fileInput.on("change", function () {
-      const file = this.files[0];
-      if (file) {
-        let fileIcon = '<i class="fa-solid fa-file file"></i>';
-        if (file.type === "application/pdf") {
-          fileIcon = '<i class="fa-solid fa-file-pdf file"></i>';
-        } else if (
-          ["image/png", "image/jpeg", "image/jpg"].includes(file.type)
-        ) {
-          fileIcon = '<i class="fa-solid fa-file-image file"></i>';
-        } else {
-          alert("檔案格式錯誤");
-          return;
-        }
-        const uploadedFile = `<div class="uploaded-file" data-file-type="${
-          file.type
-        }" data-file-name="${file.name}" data-file-url="${URL.createObjectURL(
-          file
-        )}"><div>${fileIcon}<span>${
-          file.name
-        }</span></div><div class="delete-icon"><i class="fa-solid fa-trash-can delete-file"></i></div></div>`;
-        $("#uploadedFileList").append(uploadedFile);
+      const files = this.files;
+      if (files.length > 0) {
+        Array.from(files).forEach((file) => {
+          let fileIcon = '<i class="fa-solid fa-file file"></i>';
+          if (file.type === "application/pdf") {
+            fileIcon = '<i class="fa-solid fa-file-pdf file"></i>';
+          } else if (
+            ["image/png", "image/jpeg", "image/jpg"].includes(file.type)
+          ) {
+            fileIcon = '<i class="fa-solid fa-file-image file"></i>';
+          } else {
+            alert("檔案格式錯誤");
+            return;
+          }
+          const uploadedFile = `<div class="uploaded-file" data-file-type="${
+            file.type
+          }" data-file-name="${file.name}" data-file-url="${URL.createObjectURL(
+            file
+          )}"><div>${fileIcon}<span>${
+            file.name
+          }</span></div><div class="delete-icon"><i class="fa-solid fa-trash-can delete-file"></i></div></div>`;
+          $("#uploadedFileList").append(uploadedFile);
+        });
         const currentCount = parseInt($("#uploadedCount").text(), 10);
-        $("#uploadedCount").text(currentCount + 1);
+        $("#uploadedCount").text(currentCount + files.length);
       }
     });
     fileInput.click();
@@ -76,6 +79,7 @@ $(document).ready(function () {
     var cancelModal = bootstrap.Modal.getInstance(
       document.getElementById("cancelModal")
     );
+    window.location.href = "records_receipt.html";
     cancelModal.hide();
   });
   $("#uploadForm").on("submit", async function (event) {
@@ -85,7 +89,7 @@ $(document).ready(function () {
       const formData = new FormData();
       formData.append("title", $("#title").val());
       formData.append("description", $("#description").val());
-
+      const file_name = [];
       const filePromises = [];
 
       $(".uploaded-file").each(function () {
@@ -100,6 +104,7 @@ $(document).ready(function () {
                 "files",
                 new File([blob], fileName, { type: blob.type })
               );
+              file_name.push(fileName);
             });
 
           filePromises.push(filePromise);
@@ -123,6 +128,32 @@ $(document).ready(function () {
       });
       console.log(response);
       if (response.status === "success") {
+        orgdata = orgdata.filter((data) => data.rec_id !== rec_id);
+        // 因為資料庫時間為UTC+0，在其他頁面會加一天，所以這裡要減一天
+        const newDate = new Date();
+        const formattedDate = `${newDate.getFullYear()}-${String(
+          newDate.getMonth() + 1
+        ).padStart(2, "0")}-${String(newDate.getDate() - 1).padStart(
+          2,
+          "0"
+        )}T16:00:00`;
+
+        // 準備新的資料
+        const newData = {
+          rec_id: response.data,
+          floder: "receipt",
+          rec_title: $("#title").val(),
+          user: "admin",
+          rec_Details: $("#description").val(),
+          date: formattedDate,
+          file_name: file_name,
+          edit: "1",
+        };
+
+        orgdata.push(newData);
+
+        // 更新 localStorage
+        localStorage.setItem("orgdata", JSON.stringify(orgdata));
         alert("上傳成功");
         window.location.reload();
       } else {
