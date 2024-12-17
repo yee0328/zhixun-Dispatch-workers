@@ -15,7 +15,7 @@ $(document).ready(function () {
   var ass_id = localStorage.getItem("ass_id");
   var orgdata = JSON.parse(localStorage.getItem("orgdata")) || [];
   var currentData = orgdata.filter(
-    (data) => data.ass_id === ass_id && data.edit === 0
+    (data) => data.ass_id === ass_id && data.edit == 0
   );
   console.log(currentData.length);
   if (currentData.length > 0) {
@@ -182,6 +182,7 @@ $(document).ready(function () {
       formData.append("title", $("#title").val());
       formData.append("description", $("#description").val());
       formData.append("id", ass_id);
+      formData.append("edit", 0);
       const filePromises = [];
 
       $(".uploaded-file").each(function () {
@@ -243,7 +244,7 @@ $(document).ready(function () {
         orgdata.push(newData);
         // 更新 localStorage
         localStorage.setItem("orgdata", JSON.stringify(orgdata));
-        window.location.href = "preview_assessment.html";
+        window.location.href = "records_assessment.html";
       } else {
         alert("上傳失敗:請再試一次");
       }
@@ -254,14 +255,8 @@ $(document).ready(function () {
   });
   $("#goBack").on("click", function (event) {
     event.preventDefault();
-    window.location.href = "preview_assessment.html";
+    window.location.href = "records_assessment.html";
   });
-  // $(".recordType").on("click", function () {
-  //   window.location.href = "records_assessmentt.html";
-  // });
-  // $(".previewType").on("click", function () {
-  //   window.location.href = "preview_assessmentt.html";
-  // });
   $(document).on("click", ".previewType", function () {
     window.location.href = "preview_assessment.html";
   });

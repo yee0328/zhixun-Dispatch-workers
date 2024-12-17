@@ -15,7 +15,7 @@ $(document).ready(function () {
   var rec_id = localStorage.getItem("recid");
   var orgdata = JSON.parse(localStorage.getItem("orgdata")) || [];
   var currentData = orgdata.filter(
-    (data) => data.rec_id === rec_id && data.edit === 0
+    (data) => data.rec_id === rec_id && data.edit == 0
   );
 
   if (currentData.length > 0) {
@@ -23,7 +23,6 @@ $(document).ready(function () {
     $("#title").val(currentData[0].rec_title);
     $("#description").val(currentData[0].rec_Details);
     $("#uploadedCount").text(currentData[0].file_name.length);
-    // console.log(currentData[0].file_name.length);
     currentData[0].file_name.forEach(function (File) {
       var floder = File.split(".")[1];
       let fileIcon = '<i class="fa-solid fa-file file"></i>';
@@ -178,11 +177,11 @@ $(document).ready(function () {
     try {
       // console.log($("#title").val());
       const file_name = [];
-      const file_url = [];
       const formData = new FormData();
       formData.append("title", $("#title").val());
       formData.append("description", $("#description").val());
       formData.append("id", rec_id);
+      formData.append("edit", 0);
       const filePromises = [];
 
       $(".uploaded-file").each(function () {
@@ -247,7 +246,7 @@ $(document).ready(function () {
 
         // 更新 localStorage
         localStorage.setItem("orgdata", JSON.stringify(orgdata));
-        window.location.href = "preview_receipt.html";
+        window.location.href = "records_receipt.html";
       } else {
         alert("上傳失敗:請再試一次");
       }
