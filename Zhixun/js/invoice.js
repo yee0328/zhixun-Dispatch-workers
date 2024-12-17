@@ -118,7 +118,7 @@ $(document).ready(function () {
       const response = await new Promise((resolve, reject) => {
         $.ajax({
           type: "POST",
-          url: `${window.API_CONFIG.baseUrl}/uploadreceipt`,
+          url: `${window.API_CONFIG.baseUrl}/demoreceipt`,
           data: formData,
           contentType: false,
           processData: false,
@@ -128,7 +128,7 @@ $(document).ready(function () {
       });
       console.log(response);
       if (response.status === "success") {
-        orgdata = orgdata.filter((data) => data.rec_id !== rec_id);
+        orgdata = orgdata.filter((data) => data.serial !== rec_id);
         // 因為資料庫時間為UTC+0，在其他頁面會加一天，所以這裡要減一天
         const newDate = new Date();
         const formattedDate = `${newDate.getFullYear()}-${String(
@@ -140,14 +140,14 @@ $(document).ready(function () {
 
         // 準備新的資料
         const newData = {
-          rec_id: response.data,
+          rec_id: response.serial,
           floder: "receipt",
           rec_title: $("#title").val(),
           user: "admin",
           rec_Details: $("#description").val(),
           date: formattedDate,
           file_name: file_name,
-          edit: "1",
+          edit: "0",
         };
 
         orgdata.push(newData);
@@ -155,7 +155,7 @@ $(document).ready(function () {
         // 更新 localStorage
         localStorage.setItem("orgdata", JSON.stringify(orgdata));
         alert("上傳成功");
-        window.location.reload();
+        window.location.href = "records_receipt.html";
       } else {
         alert("上傳失敗:" + response.message);
       }
