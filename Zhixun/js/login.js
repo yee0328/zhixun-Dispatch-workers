@@ -23,7 +23,17 @@ $(document).ready(function () {
       },
       success: function (response) {
         if (response.status === "success") {
-          localStorage.setItem("auth", "success");
+          var date =
+            new Date().getFullYear() +
+            "-" +
+            (new Date().getMonth() + 1) +
+            "-" +
+            new Date().getDate();
+          var auth = {
+            status: "success",
+            date: date,
+          };
+          localStorage.setItem("auth", JSON.stringify(auth));
           window.location.href = "index.html";
         } else {
           alert("帳號或密碼錯誤");
