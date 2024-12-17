@@ -399,6 +399,85 @@ const editreceipt = async (req, res) => {
     });
   }
 };
+const demoassessment = async (req, res) => {
+  try {
+    // 使用 multer 處理上傳
+    upload.array("files")(req, res, async (err) => {
+      if (err) {
+        return res.status(httpStatus.BAD_REQUEST).json({
+          success: false,
+          error: err.message,
+        });
+      }
+
+      if (!req.files || req.files.length === 0) {
+        return res.status(httpStatus.OK).send({
+          message: "沒有檔案",
+          status: "fail",
+        });
+      }
+
+      const result = await fileUpload.uploadFiles(
+        req.files,
+        "cache/assessment"
+      );
+      if (result === true) {
+        res.status(httpStatus.OK).send({
+          message: "上傳成功",
+          status: "success",
+        });
+      } else {
+        res.status(httpStatus.OK).send({
+          message: "上傳失敗",
+          status: "fail",
+        });
+      }
+    });
+  } catch (error) {
+    console.error("Upload invoice error:", error);
+    res.status(httpStatus.INTERNAL_SERVER_ERROR).send({
+      message: "上傳失敗",
+      status: "fail",
+    });
+  }
+};
+const demoreceipt = async (req, res) => {
+  try {
+    // 使用 multer 處理上傳
+    upload.array("files")(req, res, async (err) => {
+      if (err) {
+        return res.status(httpStatus.BAD_REQUEST).json({
+          success: false,
+          error: err.message,
+        });
+      }
+      if (!req.files || req.files.length === 0) {
+        return res.status(httpStatus.OK).send({
+          message: "沒有檔案",
+          status: "fail",
+        });
+      }
+      const result = await fileUpload.uploadFiles(req.files, "cache/receipt");
+      if (result === true) {
+        res.status(httpStatus.OK).send({
+          message: "上傳成功",
+          status: "success",
+        });
+      } else {
+        res.status(httpStatus.OK).send({
+          message: "上傳失敗",
+          status: "fail",
+        });
+      }
+    });
+  } catch (error) {
+    console.error("Upload invoice error:", error);
+    res.status(httpStatus.INTERNAL_SERVER_ERROR).send({
+      message: "上傳失敗",
+      status: "fail",
+    });
+  }
+};
 const deletecache = async (req, res) => {
   console.log("delete cache");
   try {
@@ -436,4 +515,6 @@ module.exports = {
   editreceipt,
   deletecache,
   uploadmaintenance,
+  demoassessment,
+  demoreceipt,
 };

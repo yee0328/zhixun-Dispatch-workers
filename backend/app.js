@@ -3,7 +3,8 @@ const express = require("express");
 const path = require("path");
 
 var adminRouter = require("./routes/admin");
-
+var uploadRouter = require("./routes/upload");
+var recodeRouter = require("./routes/recode");
 var app = express();
 
 const port = 3000;
@@ -30,6 +31,8 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, "public")));
 
 app.use("/", adminRouter);
+app.use("/", uploadRouter);
+app.use("/", recodeRouter);
 
 app.listen(port, () =>
   console.log(

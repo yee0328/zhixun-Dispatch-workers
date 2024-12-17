@@ -21,4 +21,10 @@ router.post("/editreceipt", uploadController.editreceipt);
 //http://localhost/deletecache
 router.post("/deletecache", uploadController.deletecache);
 
+//http://localhost/demoassessment
+router.post("/demoassessment", uploadController.demoassessment);
+
+//http://localhost/demoreceipt
+router.post("/demoreceipt", uploadController.demoreceipt);
+
 module.exports = router;
