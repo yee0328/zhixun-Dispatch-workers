@@ -59,7 +59,7 @@ function fillInfo(data) {
   const pdfListContainer = $(".uploaded-file");
   pdfListContainer.empty();
   console.log(data[0].edit);
-  if (data[0].edit === 0) {
+  if (data[0].edit == 0) {
     let noteAdded = false;
     data[0].file_name.forEach(function (File, index) {
       var floder = File.split(".")[1];
