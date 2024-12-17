@@ -118,7 +118,7 @@ $(document).ready(function () {
       const response = await new Promise((resolve, reject) => {
         $.ajax({
           type: "POST",
-          url: `${window.API_CONFIG.baseUrl}/uploadassessment`,
+          url: `${window.API_CONFIG.baseUrl}/demoassessment`,
           data: formData,
           contentType: false,
           processData: false,
@@ -135,21 +135,21 @@ $(document).ready(function () {
           "0"
         )}T16:00:00`;
         const newData = {
-          ass_id: response.data,
+          ass_id: response.serial,
           floder: "assessment",
           ass_title: $("#title").val(),
           user: "admin",
           ass_Details: $("#description").val(),
           date: formattedDate,
           file_name: file_name,
-          edit: "1",
+          edit: "0",
         };
 
         orgdata.push(newData);
         // 更新 localStorage
         localStorage.setItem("orgdata", JSON.stringify(orgdata));
         alert("上傳成功");
-        window.location.reload();
+        window.location.href = "records_assessment.html";
       } else {
         alert("上傳失敗:" + response.message);
       }
