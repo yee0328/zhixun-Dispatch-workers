@@ -223,8 +223,8 @@ const editassessment = async (req, res) => {
       const description = req.body.description;
       const ass_id = req.body.id;
       var filesname = [];
-      const checkstatus = await uploadService.checkassstatus(ass_id);
-      if (checkstatus === 0) {
+      const checkstatus = req.body.edit;
+      if (checkstatus == 0) {
         const result = await fileUpload.uploadFiles(
           req.files,
           "cache/assessment"
@@ -325,8 +325,8 @@ const editreceipt = async (req, res) => {
       const rec_id = req.body.id;
       var filesname = [];
       var filearray = [];
-      const checkstatus = await uploadService.checkrecstatus(rec_id);
-      if (checkstatus === 0) {
+      const checkstatus = req.body.edit;
+      if (checkstatus == 0) {
         const result = await fileUpload.uploadFiles(req.files, "cache/receipt");
         if (result === true) {
           res.status(httpStatus.OK).send({
@@ -416,7 +416,7 @@ const demoassessment = async (req, res) => {
           status: "fail",
         });
       }
-
+      var serial = generateSerialNumber();
       const result = await fileUpload.uploadFiles(
         req.files,
         "cache/assessment"
@@ -425,6 +425,7 @@ const demoassessment = async (req, res) => {
         res.status(httpStatus.OK).send({
           message: "上傳成功",
           status: "success",
+          serial: serial,
         });
       } else {
         res.status(httpStatus.OK).send({
@@ -457,11 +458,13 @@ const demoreceipt = async (req, res) => {
           status: "fail",
         });
       }
+      var serial = generateSerialNumber();
       const result = await fileUpload.uploadFiles(req.files, "cache/receipt");
       if (result === true) {
         res.status(httpStatus.OK).send({
           message: "上傳成功",
           status: "success",
+          serial: serial,
         });
       } else {
         res.status(httpStatus.OK).send({
@@ -507,7 +510,16 @@ const deletecache = async (req, res) => {
     });
   }
 };
-
+function generateSerialNumber() {
+  var length = 10; // 序列號的長度
+  var chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  var serial = "";
+  for (var i = 0; i < length; i++) {
+    var randomIndex = Math.floor(Math.random() * chars.length);
+    serial += chars[randomIndex];
+  }
+  return serial;
+}
 module.exports = {
   uploadreceipt,
   uploadassessment,
