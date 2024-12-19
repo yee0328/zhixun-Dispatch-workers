@@ -9,7 +9,7 @@ async function query(sql, params) {
       host: "localhost",
       user: "root",
       password: "", // XAMPP 預設密碼為空
-      database: "zhixun",
+      database: "zhixunDemo",
     });
 
     const [results] = await connection.execute(sql, params);
