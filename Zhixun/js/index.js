@@ -6,8 +6,10 @@ if (
       "-" +
       (new Date().getMonth() + 1) +
       "-" +
-      new Date().getDate()
+      new Date().getDate() ||
+  auth.status == null
 ) {
+  localStorage.removeItem("auth");
   window.location.href = "login.html";
 }
 $(document).ready(function () {
