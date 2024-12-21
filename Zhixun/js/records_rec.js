@@ -83,7 +83,7 @@ $(document).ready(function () {
       $("#records-table tbody").on("click", "tr", function () {
         const rec_id = $(this).data("link");
         if (rec_id) {
-          localStorage.setItem("recid", rec_id);
+          localStorage.setItem("rec_id", rec_id);
           window.location.href = "preview_receipt.html";
         }
       });

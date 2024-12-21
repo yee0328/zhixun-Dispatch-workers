@@ -6,7 +6,7 @@ $(document).ready(function () {
     console.log("1");
     BreadcrumbManager.updateBreadcrumb(iconText, uploadtext, previewType);
   }
-  var rec_id = localStorage.getItem("recid");
+  var rec_id = localStorage.getItem("rec_id");
   var orgdata = JSON.parse(localStorage.getItem("orgdata")) || [];
   var currentData = orgdata.filter((data) => data.rec_id === rec_id);
   if (currentData.length > 0) {
@@ -34,7 +34,7 @@ $(document).ready(function () {
       window.location.href = "receipt_edit.html";
     }
   });
-  $(".recordType").on("click", function () {
+  $(document).on("click", ".recordType", function () {
     window.location.href = "records_receipt.html";
   });
 });

@@ -12,7 +12,7 @@ $(document).ready(function () {
       editType
     );
   }
-  var rec_id = localStorage.getItem("recid");
+  var rec_id = localStorage.getItem("rec_id");
   var orgdata = JSON.parse(localStorage.getItem("orgdata")) || [];
   var currentData = orgdata.filter(
     (data) => data.rec_id === rec_id && data.edit == 0
