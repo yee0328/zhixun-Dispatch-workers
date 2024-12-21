@@ -33,9 +33,9 @@ $(document).ready(function () {
       dropdownMenu.toggleClass("show");
       fun = $(this).find(".fa-solid").attr("class").split(" ").at(-1);
     });
-    $(document).on("click", ".beta", function () {
-      var iconText = $(this).find(".dropdown-item").text();
-      localStorage.setItem("iconText", iconText);
+    $(document).on("click", ".dropdown-item", function () {
+      var uploadType = $(this).text();
+      localStorage.setItem("uploadType", uploadType);
       if (fun) {
         window.location.href = `${fun}.html`;
       } else {
