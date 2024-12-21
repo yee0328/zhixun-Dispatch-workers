@@ -25,15 +25,9 @@ $(document).ready(function () {
           "清潔",
         ];
         dropdownItems.forEach((item) => {
-          if (item === "機電") {
-            dropdownMenu.append(
-              `<li><div class="beta clickable"><div class="dropdown-item">${item}</div></div></li>`
-            );
-          } else {
-            dropdownMenu.append(
-              `<li><div class="dropdown-item">${item}</div></li>`
-            );
-          }
+          dropdownMenu.append(
+            `<li><div class="dropdown-item clickable">${item}</div></li>`
+          );
         });
       }
       dropdownMenu.toggleClass("show");

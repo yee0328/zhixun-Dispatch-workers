@@ -1,5 +1,6 @@
 var auth = JSON.parse(localStorage.getItem("auth"));
 if (
+  auth == null ||
   auth.status !== "success" ||
   auth.date !==
     new Date().getFullYear() +
@@ -13,10 +14,9 @@ if (
   window.location.href = "login.html";
 }
 $(document).ready(function () {
-  $(".Trial").on("click", function () {
-    var iconText = $(this).find("p").text();
-    // console.log(iconText);
-    localStorage.setItem("iconText", iconText);
+  $(".card").on("click", function () {
+    var uploadType = $(this).find("p").text();
+    localStorage.setItem("uploadType", uploadType);
     window.location.href = `view.html`;
   });
 });
