@@ -1,5 +1,17 @@
-var auth = localStorage.getItem("auth");
-if (auth !== "success") {
+var auth = JSON.parse(localStorage.getItem("mainAuth"));
+console.log(auth);
+if (
+  auth == null ||
+  auth.status !== "success" ||
+  auth.date !==
+    new Date().getFullYear() +
+      "-" +
+      (new Date().getMonth() + 1) +
+      "-" +
+      new Date().getDate() ||
+  auth.status == null
+) {
+  localStorage.removeItem("mainAuth");
   window.location.href = "login.html";
 }
 $(document).ready(function () {
