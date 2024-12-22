@@ -14,6 +14,7 @@
     <link rel="stylesheet" href="../../css/main.css">
     <link rel="stylesheet" href="../../css/mobile/login.css">
     <link rel="stylesheet" href="../../css/mobile/index.css">
+    <link rel="stylesheet" href="../../css/main.css">
     <script src="../../js//mobile/index.js"></script>
 </head>
 
@@ -21,17 +22,19 @@
     <!-- Offcanvas Sidebar -->
     <div class="offcanvas-nav" id="offcanvasNavbar">
         <div class="offcanvas-header">
+            <a class="navbar-brand" href="index.html">
             <img src="../../images/logo_black.png" alt="Logo" width="50">
-            <i class="fa-solid fa-xmark" id="closeOffcanvas"></i>
+            </a>
+            <i class="fa-solid fa-xmark clickable" id="closeOffcanvas"></i>
         </div>
         <div class="offcanvas-body p-4">
             <ul class="navbar-nav">
                 <li class="nav-item dropdown">
-                    <a class="nav-link" href="upload_record.html" data-dropdown="true">
+                    <a class="nav-link clickable" href="upload_record.html" data-dropdown="true">
                         <div><i class="fa-solid fa-upload"></i>記錄上傳</div>
                     </a>
                 </li>
-                <li class="nav-item dropdown">
+                <!-- <li class="nav-item dropdown">
                     <a class="nav-link" href="record_maintenance.html" data-dropdown="true">
                         <div><i class="fa-solid fa-clock"></i>保養紀錄</div>
                     </a>
@@ -45,7 +48,7 @@
                     <a class="nav-link" href="javascript:void(0);" data-dropdown="true">
                         <div><i class="fa-solid fa-door-open"></i>登出</div>
                     </a>
-                </li>
+                </li> -->
             </ul>
         </div>
     </div>
@@ -63,10 +66,10 @@
                 </div>
                 <div class="col-md-4 position-relative">
                     <div class="selection-container">
-                        <div class="selection selec-white"><span>紀錄上傳</span><i
+                        <div class="selection selec-white clickable"><span>紀錄上傳</span><i
                                 class="fa-solid fa-caret-right" id="upload_record"></i></div>
-                        <div class="selection selec-white"><span>紀錄查詢</span><i
-                                class="fa-solid fa-caret-right" id="record_construction"></i></div>
+                        <!-- <div class="selection selec-white"><span>紀錄查詢</span><i
+                                class="fa-solid fa-caret-right" id="record_construction"></i></div> -->
                     </div>
                 </div>
             </div>
