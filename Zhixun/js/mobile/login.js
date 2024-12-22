@@ -34,7 +34,7 @@ $(document).ready(function () {
             date: date,
             name: response.name,
           };
-          localStorage.setItem("auth", JSON.stringify(auth));
+          localStorage.setItem("mainAuth", JSON.stringify(auth));
           window.location.href = "index.html";
         } else {
           alert("帳號或密碼錯誤");
