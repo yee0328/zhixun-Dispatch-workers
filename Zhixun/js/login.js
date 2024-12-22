@@ -32,6 +32,7 @@ $(document).ready(function () {
           var auth = {
             status: "success",
             date: date,
+            name: response.name,
           };
           localStorage.setItem("auth", JSON.stringify(auth));
           window.location.href = "index.html";
