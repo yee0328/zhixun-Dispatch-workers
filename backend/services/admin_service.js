@@ -24,5 +24,24 @@ const login = async (account, pwd) => {
     return false;
   }
 };
+const manufacturerLogin = async (account, pwd) => {
+  try {
+    const sqlStr = `
+    SELECT name, account, status 
+    FROM manufacturer 
+    WHERE account = ? 
+    AND password = ?
+  `;
 
-module.exports = { login };
+    const params = [account, pwd];
+
+    const result = await database.query(sqlStr, params);
+
+    return result;
+  } catch (err) {
+    console.log("ERROR:" + err);
+    Logger.error("ERROR:" + err.stack);
+    return false;
+  }
+};
+module.exports = { login, manufacturerLogin };
