@@ -3,7 +3,8 @@ const httpStatus = require("http-status");
 const recordService = require("../services/record_service");
 
 const recordreceipt = async (req, res) => {
-  const result = await recordService.recordreceipt();
+  const uploadType = req.query.type;
+  const result = await recordService.recordreceipt(uploadType);
   if (result.length > 0) {
     res.status(httpStatus.OK).send({
       message: "查詢成功",
@@ -18,7 +19,9 @@ const recordreceipt = async (req, res) => {
   }
 };
 const recordassessment = async (req, res) => {
-  const result = await recordService.recordassessment();
+  const uploadType = req.query.type;
+  console.log(uploadType);
+  const result = await recordService.recordassessment(uploadType);
   if (result.length > 0) {
     res.status(httpStatus.OK).send({
       message: "查詢成功",
@@ -67,7 +70,8 @@ const assessmentDetail = async (req, res) => {
   }
 };
 const recordmaintenance = async (req, res) => {
-  const result = await recordService.recordmaintenance();
+  const uploadType = req.query.type;
+  const result = await recordService.recordmaintenance(uploadType);
   if (result.length > 0) {
     res.status(httpStatus.OK).send({
       message: "查詢成功",

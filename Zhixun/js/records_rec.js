@@ -1,6 +1,6 @@
 $(document).ready(function () {
   var orgdata = JSON.parse(localStorage.getItem("orgdata")) || [];
-  const iconText = "機電"; // 設置預設值
+  const iconText = localStorage.getItem("uploadType");
   const recordtext = "查詢發票";
   if (typeof BreadcrumbManager !== "undefined") {
     console.log("1");
@@ -9,10 +9,8 @@ $(document).ready(function () {
   $(".fa-chevron-left").on("click", function () {
     window.location.href = "view.html";
   });
-  callAPI()
+  callAPI(iconText)
     .then((data) => {
-      // console.log(data);
-      // console.log(orgdata);
       if (!Array.isArray(data)) {
         console.error("API 返回的數據不是數組:", data);
         return;
@@ -134,11 +132,14 @@ $(document).ready(function () {
     });
 });
 
-async function callAPI() {
+async function callAPI(type) {
   try {
     const data = await $.ajax({
       url: `${window.API_CONFIG.baseUrl}/recordreceipt`,
       type: "GET",
+      data: {
+        type: type,
+      },
     });
     return data.data;
   } catch (error) {

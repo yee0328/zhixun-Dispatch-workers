@@ -1,5 +1,5 @@
 $(document).ready(function () {
-  const iconText = "機電"; // 設置預設值
+  const iconText = localStorage.getItem("uploadType");
   const recordtext = "維護及施工紀錄查詢";
   if (typeof BreadcrumbManager !== "undefined") {
     console.log("1");
@@ -11,7 +11,7 @@ $(document).ready(function () {
   $(".fa-chevron-left").on("click", function () {
     window.location.href = "view.html";
   });
-  callAPI()
+  callAPI(iconText)
     .then((data) => {
       // console.log(data);
       if (!Array.isArray(data)) {
@@ -132,11 +132,14 @@ $(document).ready(function () {
     });
 });
 
-async function callAPI() {
+async function callAPI(type) {
   try {
     const data = await $.ajax({
       url: `${window.API_CONFIG.baseUrl}/recordmaintenance`,
       type: "GET",
+      data: {
+        type: type,
+      },
     });
     console.log("Response data:", data);
     return data.data;

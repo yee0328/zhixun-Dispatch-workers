@@ -5,12 +5,10 @@ const Logger = require("../models/plugins/logger");
 const database = require("../models/plugins/database.js");
 const sys = require("../models/plugins/system.js");
 
-const recordreceipt = async () => {
+const recordreceipt = async (uploadType) => {
   try {
-    const recript = `SELECT * FROM receipt ORDER BY rec_id DESC`;
-    const checkrecript = [recript];
-    const checkrecriptresult = await database.query(recript, checkrecript);
-    // console.log(checkrecriptresult);
+    const recript = `SELECT * FROM receipt where type = ? ORDER BY rec_id DESC`;
+    const checkrecriptresult = await database.query(recript, [uploadType]);
     if (checkrecriptresult.length > 0) {
       return checkrecriptresult;
     } else {
@@ -22,14 +20,12 @@ const recordreceipt = async () => {
     return false;
   }
 };
-const recordassessment = async () => {
+const recordassessment = async (uploadType) => {
   try {
-    const assessment = `SELECT * FROM assessment ORDER BY ass_id DESC`;
-    const checkassessment = [assessment];
-    const checkassessmentresult = await database.query(
-      assessment,
-      checkassessment
-    );
+    const assessment = `SELECT * FROM assessment where type = ? ORDER BY ass_id DESC`;
+    const checkassessmentresult = await database.query(assessment, [
+      uploadType,
+    ]);
     // console.log(checkassessmentresult);
     if (checkassessmentresult.length > 0) {
       return checkassessmentresult;
@@ -69,11 +65,6 @@ const receiptDetail = async (rec_id) => {
     } else {
       return false;
     }
-    // if (checkreceiptresult.length > 0) {
-    //   return checkreceiptresult;
-    // } else {
-    //   return false;
-    // }
   } catch (err) {
     console.log("ERROR:" + err);
     Logger.error("ERROR:" + err.stack);
@@ -113,10 +104,10 @@ const assessmentDetail = async (ass_id) => {
     return false;
   }
 };
-const recordmaintenance = async () => {
+const recordmaintenance = async (uploadType) => {
   try {
-    const maintenance = `SELECT * FROM maintenance ORDER BY main_id DESC`;
-    const checkMainresult = await database.query(maintenance);
+    const maintenance = `SELECT * FROM maintenance where type = ? ORDER BY main_id DESC`;
+    const checkMainresult = await database.query(maintenance, [uploadType]);
     // console.log(checkMainresult);
     if (checkMainresult.length > 0) {
       return checkMainresult;
