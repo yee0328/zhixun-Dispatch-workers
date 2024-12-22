@@ -161,6 +161,7 @@ const uploadmaintenance = async (req, res) => {
       const type = req.body.class;
       const Detail = req.body.Detail;
       const postion = req.body.postion;
+      const uploadType = req.body.uploadType;
       var filesname = [];
       // console.log(req.files);
       for (var i = 0; i < req.files.length; i++) {
@@ -170,7 +171,8 @@ const uploadmaintenance = async (req, res) => {
         type,
         Detail,
         postion,
-        filesname
+        filesname,
+        uploadType
       );
       if (result.exist === "duplicate") {
         res.status(httpStatus.OK).send({

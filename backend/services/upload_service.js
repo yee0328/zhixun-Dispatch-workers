@@ -146,7 +146,13 @@ const uploadassessment = async (title, description, filesname) => {
     return false;
   }
 };
-const uploadmaintenance = async (type, Detail, postion, filesname) => {
+const uploadmaintenance = async (
+  type,
+  Detail,
+  postion,
+  filesname,
+  uploadType
+) => {
   try {
     const uniqueFilesname = new Set(filesname);
     if (uniqueFilesname.size !== filesname.length) {
@@ -182,8 +188,16 @@ const uploadmaintenance = async (type, Detail, postion, filesname) => {
         main_id = sys.getTodayDate() + "01";
       }
     }
-    const sqlStr = `INSERT INTO maintenance (main_id,main_class,main_Detail ,main_postion,user,date) VALUES (?,?,?, ?, ?,?)`;
-    const params = [main_id, type, Detail, postion, "admin", date];
+    const sqlStr = `INSERT INTO maintenance (main_id,main_class,main_Detail ,main_postion,user,date,type) VALUES (?,?,?, ?, ?,?,?)`;
+    const params = [
+      main_id,
+      type,
+      Detail,
+      postion,
+      uploadType,
+      date,
+      uploadType,
+    ];
     const result = await database.query(sqlStr, params);
     if (result.affectedRows === 1) {
       for (var i = 0; i < filesname.length; i++) {

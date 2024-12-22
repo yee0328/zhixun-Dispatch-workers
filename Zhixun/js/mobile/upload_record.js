@@ -7,28 +7,6 @@ $(document).ready(function () {
     $("#offcanvasNavbar").removeClass("show");
   });
 
-  $('[data-dropdown="true"]').on("click", function () {
-    $(this).toggleClass("active");
-    const dropdownMenu = $(this).siblings(".dropdown-menu");
-    if (dropdownMenu.children().length === 0) {
-      const dropdownItems = [
-        "機電",
-        "弱電",
-        "電梯",
-        "廚餘管線",
-        "污水處理",
-        "園藝",
-        "清潔",
-      ];
-      dropdownItems.forEach((item) => {
-        dropdownMenu.append(
-          `<li><a class="dropdown-item" href="#">${item}</a></li>`
-        );
-      });
-    }
-    dropdownMenu.toggleClass("show");
-  });
-
   $("#goBack").on("click", function () {
     window.location.href = "index.html";
   });
@@ -117,6 +95,10 @@ $(document).ready(function () {
       formData.append("class", $("#category").val());
       formData.append("Detail", $("#title").val());
       formData.append("postion", $("#description").val());
+      formData.append(
+        "uploadType",
+        JSON.parse(localStorage.getItem("mainAuth")).name
+      );
 
       const filePromises = [];
 
