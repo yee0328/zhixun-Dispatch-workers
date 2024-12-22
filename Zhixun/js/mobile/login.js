@@ -16,23 +16,31 @@ $(document).ready(function () {
     const password = $("#password").val();
     $.ajax({
       type: "POST",
-      url: `${window.API_CONFIG.baseUrl}/login`,
+      url: `${window.API_CONFIG.baseUrl}/manufacturerLogin`,
       data: {
         account: account,
         password: password,
       },
       success: function (response) {
-        console.log(response);
         if (response.status === "success") {
-          localStorage.setItem("auth", "success");
+          var date =
+            new Date().getFullYear() +
+            "-" +
+            (new Date().getMonth() + 1) +
+            "-" +
+            new Date().getDate();
+          var auth = {
+            status: "success",
+            date: date,
+            name: response.name,
+          };
+          localStorage.setItem("auth", JSON.stringify(auth));
           window.location.href = "index.html";
         } else {
           alert("帳號或密碼錯誤");
         }
       },
     });
-    // window.location.href =
-    //   "http://localhost/20241110/Zhixun/templates/mobile/index.html";
     // 監聽 Enter 鍵
     $("#login-form input").on("keydown", function (event) {
       if (event.key === "Enter") {
