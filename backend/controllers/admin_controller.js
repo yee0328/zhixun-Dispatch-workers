@@ -20,6 +20,7 @@ const login = async (req, res) => {
       res.status(httpStatus.OK).send({
         message: "登入成功",
         status: "success",
+        name: account[0].name,
       });
     } else {
       res.status(httpStatus.OK).send({
@@ -57,6 +58,7 @@ const manufacturerLogin = async (req, res) => {
       res.status(httpStatus.OK).send({
         message: "登入成功",
         status: "success",
+        name: account[0].name,
       });
     } else {
       res.status(httpStatus.OK).send({
