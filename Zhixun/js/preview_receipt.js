@@ -1,5 +1,5 @@
 $(document).ready(function () {
-  const iconText = "機電"; // 設置預設值
+  const iconText = localStorage.getItem("uploadType"); // 設置預設值
   const uploadtext = "查詢發票";
   var previewType = "發票紀錄";
   if (typeof BreadcrumbManager !== "undefined") {
@@ -7,27 +7,27 @@ $(document).ready(function () {
     BreadcrumbManager.updateBreadcrumb(iconText, uploadtext, previewType);
   }
   var rec_id = localStorage.getItem("rec_id");
-  var orgdata = JSON.parse(localStorage.getItem("orgdata")) || [];
-  var currentData = orgdata.filter((data) => data.rec_id === rec_id);
-  if (currentData.length > 0) {
-    fillInfo(currentData);
-  } else {
-    $.ajax({
-      url: `${window.API_CONFIG.baseUrl}/receiptDetail`,
-      type: "GET",
-      data: {
-        rec_id: rec_id,
-      },
-      success: function (response) {
-        console.log("Response data:", response);
-        data = response.data;
-        fillInfo(data);
-      },
-      error: function (error) {
-        console.log("Error fetching files:", error);
-      },
-    });
-  }
+  // var orgdata = JSON.parse(localStorage.getItem("orgdata")) || [];
+  // var currentData = orgdata.filter((data) => data.rec_id === rec_id);
+  // if (currentData.length > 0) {
+  //   fillInfo(currentData);
+  // } else {
+  $.ajax({
+    url: `${window.API_CONFIG.baseUrl}/receiptDetail`,
+    type: "GET",
+    data: {
+      rec_id: rec_id,
+    },
+    success: function (response) {
+      console.log("Response data:", response);
+      data = response.data;
+      fillInfo(data);
+    },
+    error: function (error) {
+      console.log("Error fetching files:", error);
+    },
+  });
+  // }
   $(".edit-button").on("click", function () {
     if (rec_id) {
       localStorage.setItem("rec_id", rec_id);
@@ -59,48 +59,48 @@ function fillInfo(data) {
   const pdfListContainer = $(".uploaded-file");
   pdfListContainer.empty();
   console.log(data[0].edit);
-  if (data[0].edit == 0) {
-    let noteAdded = false;
-    data[0].file_name.forEach(function (File, index) {
-      var floder = File.split(".")[1];
-      var orgpath = "../../file/cache/receipt/";
-      if (floder == "pdf") {
-        const pdfElement = `<li><a href="${orgpath}${floder}/${File}" target="_blank" download>${File} <i class="fa-solid fa-external-link-alt"></i></a></li>`;
-        pdfListContainer.append(pdfElement);
-        if (!noteAdded) {
-          $(".upload-wrapper div").append(
-            '<p class="note">＊ 點擊檔案將自動下載</p>'
-          );
-          noteAdded = true;
-        }
-      } else {
-        floder = "photo";
-        const imageElement = `<img src="${orgpath}${floder}/${File}" alt="${File}" class="slider-image">`;
-        sliderContainer.append(imageElement);
+  // if (data[0].edit == 0) {
+  //   let noteAdded = false;
+  //   data[0].file_name.forEach(function (File, index) {
+  //     var floder = File.split(".")[1];
+  //     var orgpath = "../../file/cache/receipt/";
+  //     if (floder == "pdf") {
+  //       const pdfElement = `<li><a href="${orgpath}${floder}/${File}" target="_blank" download>${File} <i class="fa-solid fa-external-link-alt"></i></a></li>`;
+  //       pdfListContainer.append(pdfElement);
+  //       if (!noteAdded) {
+  //         $(".upload-wrapper div").append(
+  //           '<p class="note">＊ 點擊檔案將自動下載</p>'
+  //         );
+  //         noteAdded = true;
+  //       }
+  //     } else {
+  //       floder = "photo";
+  //       const imageElement = `<img src="${orgpath}${floder}/${File}" alt="${File}" class="slider-image">`;
+  //       sliderContainer.append(imageElement);
+  //     }
+  //   });
+  // } else {
+  console.log(data[0].file_name);
+  console.log(data[0].file_name.length);
+  let noteAdded = false;
+  data[0].file_name.forEach(function (File) {
+    var floder = File.split(".")[1];
+    if (floder == "pdf") {
+      const pdfElement = `<li><a href="${path}${floder}/${File}" target="_blank" download>${File} <i class="fa-solid fa-external-link-alt"></i></a></li>`;
+      pdfListContainer.append(pdfElement);
+      if (!noteAdded) {
+        $(".upload-wrapper div").append(
+          '<p class="note">＊ 點擊檔案將自動下載</p>'
+        );
+        noteAdded = true;
       }
-    });
-  } else {
-    console.log(data[0].file_name);
-    console.log(data[0].file_name.length);
-    let noteAdded = false;
-    data[0].file_name.forEach(function (File) {
-      var floder = File.split(".")[1];
-      if (floder == "pdf") {
-        const pdfElement = `<li><a href="${path}${floder}/${File}" target="_blank" download>${File} <i class="fa-solid fa-external-link-alt"></i></a></li>`;
-        pdfListContainer.append(pdfElement);
-        if (!noteAdded) {
-          $(".upload-wrapper div").append(
-            '<p class="note">＊ 點擊檔案將自動下載</p>'
-          );
-          noteAdded = true;
-        }
-      } else {
-        floder = "photo";
-        const imageElement = `<img src="${path}${floder}/${File}" alt="${File}" class="slider-image">`;
-        sliderContainer.append(imageElement);
-      }
-    });
-  }
+    } else {
+      floder = "photo";
+      const imageElement = `<img src="${path}${floder}/${File}" alt="${File}" class="slider-image">`;
+      sliderContainer.append(imageElement);
+    }
+  });
+  // }
   $(".slider").slick({
     dots: true,
     infinite: false,

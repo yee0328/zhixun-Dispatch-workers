@@ -1,5 +1,5 @@
 $(document).ready(function () {
-  var orgdata = JSON.parse(localStorage.getItem("orgdata")) || [];
+  // var orgdata = JSON.parse(localStorage.getItem("orgdata")) || [];
   const iconText = localStorage.getItem("uploadType");
   const recordtext = "查詢發票";
   if (typeof BreadcrumbManager !== "undefined") {
@@ -19,40 +19,39 @@ $(document).ready(function () {
       // 建立table
       const tableBody = $("#records-table tbody");
       tableBody.empty();
-      const processedIds = new Set(); // 追蹤已處理的 ID
-      const reversedOrgData = [...orgdata].reverse();
+      //   const processedIds = new Set(); // 追蹤已處理的 ID
+      //   const reversedOrgData = [...orgdata].reverse();
 
-      // 先處理 orgdata 的資料
-      reversedOrgData.forEach((item) => {
-        processedIds.add(item.rec_id);
+      //   // 先處理 orgdata 的資料
+      //   reversedOrgData.forEach((item) => {
+      //     processedIds.add(item.rec_id);
 
-        var date = new Date(item.date);
-        date.setDate(date.getDate() + 1);
-        var formattedDate = date.toISOString().substring(0, 10);
+      //     var date = new Date(item.date);
+      //     date.setDate(date.getDate() + 1);
+      //     var formattedDate = date.toISOString().substring(0, 10);
 
-        const row = `<tr data-link="${item.rec_id}">
-      <td>${item.rec_title}</td>
-      <td>${item.user}</td>
-      <td>${formattedDate}</td>
-    </tr>`;
-        tableBody.append(row);
-      });
+      //     const row = `<tr data-link="${item.rec_id}">
+      //   <td>${item.rec_title}</td>
+      //   <td>${item.user}</td>
+      //   <td>${formattedDate}</td>
+      // </tr>`;
+      //     tableBody.append(row);
+      //   });
 
       // 再處理 API 資料，但只處理未出現過的 ID
       data.forEach((record) => {
-        if (!processedIds.has(record.rec_id)) {
-          var date = new Date(record.date);
-          date.setDate(date.getDate() + 1);
-          var formattedDate = date.toISOString().substring(0, 10);
+        // if (!processedIds.has(record.rec_id)) {
+        var date = new Date(record.date);
+        date.setDate(date.getDate() + 1);
+        var formattedDate = date.toISOString().substring(0, 10);
 
-          const row = `<tr data-link="${record.rec_id}">
-      <td>${record.rec_title}</td>
-      <td>${record.user}</td>
-      <td>${formattedDate}</td>
-    </tr>`;
-
-          tableBody.append(row);
-        }
+        const row = `<tr data-link="${record.rec_id}">
+                     <td>${record.rec_title}</td>
+                     <td>${record.user}</td>
+                     <td>${formattedDate}</td>
+                     </tr>`;
+        tableBody.append(row);
+        // }
       });
 
       const table = $("#records-table").DataTable({
