@@ -4,7 +4,7 @@ const Logger = require("../models/plugins/logger");
 const sys = require("../models/plugins/system.js");
 const database = require("../models/plugins/database.js");
 
-const uploadreceipt = async (title, description, filesname) => {
+const uploadreceipt = async (title, description, type, name, filesname) => {
   try {
     const uniqueFilesname = new Set(filesname);
     if (uniqueFilesname.size !== filesname.length) {
@@ -49,8 +49,8 @@ const uploadreceipt = async (title, description, filesname) => {
       }
     }
     // console.log("recid" + rec_id);
-    const sqlStr = `INSERT INTO receipt (rec_id,rec_title, rec_Details,user,date) VALUES (?,?, ?, ?,?)`;
-    const params = [rec_id, title, description, "admin", date];
+    const sqlStr = `INSERT INTO receipt (rec_id,rec_title, rec_Details,user,date,type) VALUES (?,?, ?, ?,?,?)`;
+    const params = [rec_id, title, description, name, date, type];
     const result = await database.query(sqlStr, params);
     if (result.affectedRows === 1) {
       for (var i = 0; i < filesname.length; i++) {
@@ -79,7 +79,7 @@ const uploadreceipt = async (title, description, filesname) => {
     return false;
   }
 };
-const uploadassessment = async (title, description, filesname) => {
+const uploadassessment = async (title, description, type, name, filesname) => {
   try {
     const uniqueFilesname = new Set(filesname);
     if (uniqueFilesname.size !== filesname.length) {

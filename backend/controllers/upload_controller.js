@@ -37,6 +37,8 @@ const uploadreceipt = async (req, res) => {
       }
       const title = req.body.title;
       const description = req.body.description;
+      const type = req.body.type;
+      const name = req.body.name;
       var filesname = [];
       for (var i = 0; i < req.files.length; i++) {
         filesname.push(req.files[i].originalname);
@@ -44,6 +46,8 @@ const uploadreceipt = async (req, res) => {
       const result = await uploadService.uploadreceipt(
         title,
         description,
+        type,
+        name,
         filesname
       );
       // console.log(result);

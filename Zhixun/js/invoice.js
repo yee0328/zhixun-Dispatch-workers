@@ -1,12 +1,10 @@
 $(document).ready(function () {
-  const iconText = "機電"; // 設置預設值
+  const iconText = localStorage.getItem("uploadType");
   const uploadtext = "上傳發票";
   if (typeof BreadcrumbManager !== "undefined") {
     console.log("1");
     BreadcrumbManager.updateBreadcrumb(iconText, uploadtext);
   }
-  var orgdata = JSON.parse(localStorage.getItem("orgdata")) || [];
-  var rec_id = "";
   $("#uploadBox").on("click", function () {
     const fileInput = $(
       '<input type="file" accept=".pdf, .png, .jpeg, .jpg" multiple style="display:none;">'
@@ -89,6 +87,9 @@ $(document).ready(function () {
       const formData = new FormData();
       formData.append("title", $("#title").val());
       formData.append("description", $("#description").val());
+      formData.append("type", iconText);
+      formData.append("name", JSON.parse(localStorage.getItem("auth")).name);
+
       const file_name = [];
       const filePromises = [];
 
@@ -118,7 +119,7 @@ $(document).ready(function () {
       const response = await new Promise((resolve, reject) => {
         $.ajax({
           type: "POST",
-          url: `${window.API_CONFIG.baseUrl}/demoreceipt`,
+          url: `${window.API_CONFIG.baseUrl}/uploadreceipt`,
           data: formData,
           contentType: false,
           processData: false,
@@ -128,32 +129,6 @@ $(document).ready(function () {
       });
       console.log(response);
       if (response.status === "success") {
-        orgdata = orgdata.filter((data) => data.serial !== rec_id);
-        // 因為資料庫時間為UTC+0，在其他頁面會加一天，所以這裡要減一天
-        const newDate = new Date();
-        const formattedDate = `${newDate.getFullYear()}-${String(
-          newDate.getMonth() + 1
-        ).padStart(2, "0")}-${String(newDate.getDate() - 1).padStart(
-          2,
-          "0"
-        )}T16:00:00`;
-
-        // 準備新的資料
-        const newData = {
-          rec_id: response.serial,
-          floder: "receipt",
-          rec_title: $("#title").val(),
-          user: "admin",
-          rec_Details: $("#description").val(),
-          date: formattedDate,
-          file_name: file_name,
-          edit: "0",
-        };
-
-        orgdata.push(newData);
-
-        // 更新 localStorage
-        localStorage.setItem("orgdata", JSON.stringify(orgdata));
         alert("上傳成功");
         window.location.href = "records_receipt.html";
       } else {
