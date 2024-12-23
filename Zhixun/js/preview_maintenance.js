@@ -1,5 +1,5 @@
 $(document).ready(function () {
-  const iconText = "機電"; // 設置預設值
+  const iconText = localStorage.getItem("uploadType"); // 設置預設值
   const uploadtext = "維護及施工紀錄查詢";
   var previewType = "維護及施工紀錄";
   if (typeof BreadcrumbManager !== "undefined") {

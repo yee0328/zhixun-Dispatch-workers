@@ -1,5 +1,5 @@
 $(document).ready(function () {
-  const iconText = "機電"; // 設置預設值
+  const iconText = localStorage.getItem("uploadType"); // 設置預設值
   const recordType = "查詢估價單";
   const previewType = "估價單紀錄";
   const editType = "編輯估價單";
