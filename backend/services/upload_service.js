@@ -116,8 +116,8 @@ const uploadassessment = async (title, description, type, name, filesname) => {
       }
     }
 
-    const sqlStr = `INSERT INTO assessment (ass_id,ass_title, ass_Details,user,date) VALUES (?,?, ?, ?,?)`;
-    const params = [ass_id, title, description, "admin", date];
+    const sqlStr = `INSERT INTO assessment (ass_id,ass_title, ass_Details,user,date,type) VALUES (?,?, ?, ?,?,?)`;
+    const params = [ass_id, title, description, name, date, type];
     const result = await database.query(sqlStr, params);
     if (result.affectedRows === 1) {
       for (var i = 0; i < filesname.length; i++) {

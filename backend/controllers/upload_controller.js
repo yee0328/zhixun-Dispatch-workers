@@ -101,6 +101,8 @@ const uploadassessment = async (req, res) => {
       }
       const title = req.body.title;
       const description = req.body.description;
+      const type = req.body.type;
+      const name = req.body.name;
       var filesname = [];
       // console.log(req.files);
       for (var i = 0; i < req.files.length; i++) {
@@ -109,6 +111,8 @@ const uploadassessment = async (req, res) => {
       const result = await uploadService.uploadassessment(
         title,
         description,
+        type,
+        name,
         filesname
       );
       if (result.exist === "duplicate") {

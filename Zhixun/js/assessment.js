@@ -1,12 +1,12 @@
 $(document).ready(function () {
-  const iconText = "機電"; // 設置預設值
+  const iconText = localStorage.getItem("uploadType"); // 設置預設值
   const uploadtext = "上傳估價單";
   if (typeof BreadcrumbManager !== "undefined") {
     console.log("1");
     BreadcrumbManager.updateBreadcrumb(iconText, uploadtext);
   }
-  var orgdata = JSON.parse(localStorage.getItem("orgdata")) || [];
-  var ass_id = "";
+  // var orgdata = JSON.parse(localStorage.getItem("orgdata")) || [];
+  // var ass_id = "";
   $("#uploadBox").on("click", function () {
     const fileInput = $(
       '<input type="file" accept=".pdf, .png, .jpeg, .jpg" multiple style="display:none;">'
@@ -89,6 +89,8 @@ $(document).ready(function () {
       const formData = new FormData();
       formData.append("title", $("#title").val());
       formData.append("description", $("#description").val());
+      formData.append("type", iconText);
+      formData.append("name", JSON.parse(localStorage.getItem("auth")).name);
       const file_name = [];
       const filePromises = [];
 
@@ -118,7 +120,7 @@ $(document).ready(function () {
       const response = await new Promise((resolve, reject) => {
         $.ajax({
           type: "POST",
-          url: `${window.API_CONFIG.baseUrl}/demoassessment`,
+          url: `${window.API_CONFIG.baseUrl}/uploadassessment`,
           data: formData,
           contentType: false,
           processData: false,
@@ -127,27 +129,27 @@ $(document).ready(function () {
         });
       });
       if (response.status === "success") {
-        const newDate = new Date();
-        const formattedDate = `${newDate.getFullYear()}-${String(
-          newDate.getMonth() + 1
-        ).padStart(2, "0")}-${String(newDate.getDate() - 1).padStart(
-          2,
-          "0"
-        )}T16:00:00`;
-        const newData = {
-          ass_id: response.serial,
-          floder: "assessment",
-          ass_title: $("#title").val(),
-          user: "admin",
-          ass_Details: $("#description").val(),
-          date: formattedDate,
-          file_name: file_name,
-          edit: "0",
-        };
+        // const newDate = new Date();
+        // const formattedDate = `${newDate.getFullYear()}-${String(
+        //   newDate.getMonth() + 1
+        // ).padStart(2, "0")}-${String(newDate.getDate() - 1).padStart(
+        //   2,
+        //   "0"
+        // )}T16:00:00`;
+        // const newData = {
+        //   ass_id: response.serial,
+        //   floder: "assessment",
+        //   ass_title: $("#title").val(),
+        //   user: "admin",
+        //   ass_Details: $("#description").val(),
+        //   date: formattedDate,
+        //   file_name: file_name,
+        //   edit: "0",
+        // };
 
-        orgdata.push(newData);
-        // 更新 localStorage
-        localStorage.setItem("orgdata", JSON.stringify(orgdata));
+        // orgdata.push(newData);
+        // // 更新 localStorage
+        // localStorage.setItem("orgdata", JSON.stringify(orgdata));
         alert("上傳成功");
         window.location.href = "records_assessment.html";
       } else {
