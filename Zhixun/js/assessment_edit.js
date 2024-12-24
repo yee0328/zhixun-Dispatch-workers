@@ -13,82 +13,82 @@ $(document).ready(function () {
     );
   }
   var ass_id = localStorage.getItem("ass_id");
-  var orgdata = JSON.parse(localStorage.getItem("orgdata")) || [];
-  var currentData = orgdata.filter(
-    (data) => data.ass_id === ass_id && data.edit == 0
-  );
-  console.log(currentData.length);
-  if (currentData.length > 0) {
-    var path = "../../file/cache/assessment/";
-    $("#title").val(currentData[0].ass_title);
-    $("#description").val(currentData[0].ass_Details);
-    $("#uploadedCount").text(currentData[0].file_name.length);
-    // console.log(currentData.file_name.length);
-    currentData[0].file_name.forEach(function (File) {
-      var floder = File.split(".")[1];
-      let fileIcon = '<i class="fa-solid fa-file file"></i>';
-      if (floder === "pdf") {
-        fileIcon = '<i class="fa-solid fa-file-pdf file"></i>';
-      } else if (["png", "jpeg", "jpg"].includes(floder)) {
-        fileIcon = '<i class="fa-solid fa-file-image file"></i>';
-      } else {
-        alert("檔案格式錯誤");
-        return;
-      }
-      if (floder === "pdf") {
-        const uploadedFile = `<div class="uploaded-file" data-file-type="pdf" data-file-url="${path}pdf/${File}"
-        data-file-name="${File}"><div>${fileIcon}<span>${File}</span></div><div class="delete-icon"><i class="fa-solid fa-trash-can delete-file"></i></div></div>`;
-        $("#uploadedFileList").append(uploadedFile);
-      } else {
-        floder = "photo";
-        const uploadedFile = `<div class="uploaded-file" data-file-type="${floder}" data-file-url="${path}${floder}/${File}"
-        data-file-name="${File}"><div>${fileIcon}<span>${File}</span></div><div class="delete-icon"><i class="fa-solid fa-trash-can delete-file"></i></div></div>`;
-        $("#uploadedFileList").append(uploadedFile);
-      }
-    });
-  } else {
-    $.ajax({
-      url: `${window.API_CONFIG.baseUrl}/assessmentDetail`,
-      type: "GET",
-      data: {
-        ass_id: ass_id,
-      },
-      success: function (response) {
-        data = response.data;
-        console.log(data);
-        var path = "../../file/assessment/";
-        $("#title").val(data[0].ass_title);
-        $("#description").val(data[0].ass_Details);
-        $("#uploadedCount").text(data[0].file_name.length);
-        console.log(data[0].file_name.length);
-        data[0].file_name.forEach(function (File) {
-          var floder = File.split(".")[1];
-          let fileIcon = '<i class="fa-solid fa-file file"></i>';
-          if (floder === "pdf") {
-            fileIcon = '<i class="fa-solid fa-file-pdf file"></i>';
-          } else if (["png", "jpeg", "jpg"].includes(floder)) {
-            fileIcon = '<i class="fa-solid fa-file-image file"></i>';
-          } else {
-            alert("檔案格式錯誤");
-            return;
-          }
-          if (floder === "pdf") {
-            const uploadedFile = `<div class="uploaded-file" data-file-type="pdf" data-file-url="${path}pdf/${File}"
+  // var orgdata = JSON.parse(localStorage.getItem("orgdata")) || [];
+  // var currentData = orgdata.filter(
+  //   (data) => data.ass_id === ass_id && data.edit == 0
+  // );
+  // console.log(currentData.length);
+  // if (currentData.length > 0) {
+  //   var path = "../../file/cache/assessment/";
+  //   $("#title").val(currentData[0].ass_title);
+  //   $("#description").val(currentData[0].ass_Details);
+  //   $("#uploadedCount").text(currentData[0].file_name.length);
+  //   // console.log(currentData.file_name.length);
+  //   currentData[0].file_name.forEach(function (File) {
+  //     var floder = File.split(".")[1];
+  //     let fileIcon = '<i class="fa-solid fa-file file"></i>';
+  //     if (floder === "pdf") {
+  //       fileIcon = '<i class="fa-solid fa-file-pdf file"></i>';
+  //     } else if (["png", "jpeg", "jpg"].includes(floder)) {
+  //       fileIcon = '<i class="fa-solid fa-file-image file"></i>';
+  //     } else {
+  //       alert("檔案格式錯誤");
+  //       return;
+  //     }
+  //     if (floder === "pdf") {
+  //       const uploadedFile = `<div class="uploaded-file" data-file-type="pdf" data-file-url="${path}pdf/${File}"
+  //       data-file-name="${File}"><div>${fileIcon}<span>${File}</span></div><div class="delete-icon"><i class="fa-solid fa-trash-can delete-file"></i></div></div>`;
+  //       $("#uploadedFileList").append(uploadedFile);
+  //     } else {
+  //       floder = "photo";
+  //       const uploadedFile = `<div class="uploaded-file" data-file-type="${floder}" data-file-url="${path}${floder}/${File}"
+  //       data-file-name="${File}"><div>${fileIcon}<span>${File}</span></div><div class="delete-icon"><i class="fa-solid fa-trash-can delete-file"></i></div></div>`;
+  //       $("#uploadedFileList").append(uploadedFile);
+  //     }
+  //   });
+  // } else {
+  $.ajax({
+    url: `${window.API_CONFIG.baseUrl}/assessmentDetail`,
+    type: "GET",
+    data: {
+      ass_id: ass_id,
+    },
+    success: function (response) {
+      data = response.data;
+      console.log(data);
+      var path = "../../file/assessment/";
+      $("#title").val(data[0].ass_title);
+      $("#description").val(data[0].ass_Details);
+      $("#uploadedCount").text(data[0].file_name.length);
+      console.log(data[0].file_name.length);
+      data[0].file_name.forEach(function (File) {
+        var floder = File.split(".")[1];
+        let fileIcon = '<i class="fa-solid fa-file file"></i>';
+        if (floder === "pdf") {
+          fileIcon = '<i class="fa-solid fa-file-pdf file"></i>';
+        } else if (["png", "jpeg", "jpg"].includes(floder)) {
+          fileIcon = '<i class="fa-solid fa-file-image file"></i>';
+        } else {
+          alert("檔案格式錯誤");
+          return;
+        }
+        if (floder === "pdf") {
+          const uploadedFile = `<div class="uploaded-file" data-file-type="pdf" data-file-url="${path}pdf/${File}"
             data-file-name="${File}"><div>${fileIcon}<span>${File}</span></div><div class="delete-icon"><i class="fa-solid fa-trash-can delete-file"></i></div></div>`;
-            $("#uploadedFileList").append(uploadedFile);
-          } else {
-            floder = "photo";
-            const uploadedFile = `<div class="uploaded-file" data-file-type="${floder}" data-file-url="${path}${floder}/${File}"
+          $("#uploadedFileList").append(uploadedFile);
+        } else {
+          floder = "photo";
+          const uploadedFile = `<div class="uploaded-file" data-file-type="${floder}" data-file-url="${path}${floder}/${File}"
             data-file-name="${File}"><div>${fileIcon}<span>${File}</span></div><div class="delete-icon"><i class="fa-solid fa-trash-can delete-file"></i></div></div>`;
-            $("#uploadedFileList").append(uploadedFile);
-          }
-        });
-      },
-      error: function (error) {
-        console.log("Error fetching files:", error);
-      },
-    });
-  }
+          $("#uploadedFileList").append(uploadedFile);
+        }
+      });
+    },
+    error: function (error) {
+      console.log("Error fetching files:", error);
+    },
+  });
+  // }
   $("#uploadBox").on("click", function () {
     const fileInput = $(
       '<input type="file" accept=".pdf, .png, .jpeg, .jpg" multiple style="display:none;">'
@@ -182,7 +182,7 @@ $(document).ready(function () {
       formData.append("title", $("#title").val());
       formData.append("description", $("#description").val());
       formData.append("id", ass_id);
-      formData.append("edit", 0);
+      formData.append("name", JSON.parse(localStorage.getItem("auth")).name);
       const filePromises = [];
 
       $(".uploaded-file").each(function () {
@@ -220,30 +220,30 @@ $(document).ready(function () {
       });
       console.log(response);
       if (response.status === "success") {
-        //刪除同ID的資料，這樣在record才可以正確排序
-        orgdata = orgdata.filter((data) => data.ass_id !== ass_id);
-        // 因為資料庫時間為UTC+0，在其他頁面會加一天，所以這裡要減一天
-        const newDate = new Date();
-        const formattedDate = `${newDate.getFullYear()}-${String(
-          newDate.getMonth() + 1
-        ).padStart(2, "0")}-${String(newDate.getDate() - 1).padStart(
-          2,
-          "0"
-        )}T16:00:00`;
-        const newData = {
-          ass_id: ass_id,
-          floder: "assessment",
-          ass_title: $("#title").val(),
-          user: "admin",
-          ass_Details: $("#description").val(),
-          date: formattedDate,
-          file_name: file_name,
-          edit: response.data,
-        };
+        // //刪除同ID的資料，這樣在record才可以正確排序
+        // orgdata = orgdata.filter((data) => data.ass_id !== ass_id);
+        // // 因為資料庫時間為UTC+0，在其他頁面會加一天，所以這裡要減一天
+        // const newDate = new Date();
+        // const formattedDate = `${newDate.getFullYear()}-${String(
+        //   newDate.getMonth() + 1
+        // ).padStart(2, "0")}-${String(newDate.getDate() - 1).padStart(
+        //   2,
+        //   "0"
+        // )}T16:00:00`;
+        // const newData = {
+        //   ass_id: ass_id,
+        //   floder: "assessment",
+        //   ass_title: $("#title").val(),
+        //   user: "admin",
+        //   ass_Details: $("#description").val(),
+        //   date: formattedDate,
+        //   file_name: file_name,
+        //   edit: response.data,
+        // };
 
-        orgdata.push(newData);
-        // 更新 localStorage
-        localStorage.setItem("orgdata", JSON.stringify(orgdata));
+        // orgdata.push(newData);
+        // // 更新 localStorage
+        // localStorage.setItem("orgdata", JSON.stringify(orgdata));
         window.location.href = "records_assessment.html";
       } else {
         alert("上傳失敗:請再試一次");
