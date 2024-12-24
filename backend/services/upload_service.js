@@ -235,7 +235,7 @@ const checkrecstatus = async (id) => {
   const result = await database.query(rec_status, [id]);
   return result[0].rec_status;
 };
-const editassessment = async (ass_id, title, description, filesname) => {
+const editassessment = async (ass_id, title, description, name, filesname) => {
   try {
     const uniqueFilesname = new Set(filesname);
     if (uniqueFilesname.size !== filesname.length) {
@@ -250,8 +250,8 @@ const editassessment = async (ass_id, title, description, filesname) => {
     }
     var date = sys.getSysDateTimeV2();
     var datestr = sys.getTodayDate();
-    const editassdata = `UPDATE assessment  SET ass_title=? ,ass_Details=? , date=? where ass_id=?`;
-    const params = [title, description, date, ass_id];
+    const editassdata = `UPDATE assessment  SET ass_title=? ,ass_Details=? , date=? ,user=? where ass_id=?`;
+    const params = [title, description, date, name, ass_id];
     const result = await database.query(editassdata, params);
     if (result.affectedRows == 1) {
       const deleteFiles = `DELETE FROM ass_file  where ass_id=? `;
@@ -284,7 +284,7 @@ const editassessment = async (ass_id, title, description, filesname) => {
     return false;
   }
 };
-const editreceipt = async (rec_id, title, description, filesname) => {
+const editreceipt = async (rec_id, title, description, name, filesname) => {
   try {
     const uniqueFilesname = new Set(filesname);
     if (uniqueFilesname.size !== filesname.length) {
@@ -300,8 +300,8 @@ const editreceipt = async (rec_id, title, description, filesname) => {
     }
     var date = sys.getSysDateTimeV2();
     var datestr = sys.getTodayDate();
-    const editassdata = `UPDATE  receipt  SET rec_title=?,rec_Details=?,date=? where rec_id=?`;
-    const params = [title, description, date, rec_id];
+    const editassdata = `UPDATE  receipt  SET rec_title=?,rec_Details=?,date=?,user=? where rec_id=?`;
+    const params = [title, description, date, name, rec_id];
     const result = await database.query(editassdata, params);
     if (result.affectedRows == 1) {
       const deleteFiles = `DELETE FROM rec_file where rec_id=? `;

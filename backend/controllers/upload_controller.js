@@ -232,66 +232,59 @@ const editassessment = async (req, res) => {
       const title = req.body.title;
       const description = req.body.description;
       const ass_id = req.body.id;
+      const name = req.body.name;
       var filesname = [];
-      const checkstatus = req.body.edit;
-      if (checkstatus == 0) {
-        const result = await fileUpload.uploadFiles(
-          req.files,
-          "cache/assessment"
+      // const checkstatus = uploadService.checkassstatus(ass_id);
+      // if (checkstatus == 0) {
+      //   const result = await fileUpload.uploadFiles(
+      //     req.files,
+      //     "cache/assessment"
+      //   );
+      //   if (result === true) {
+      //     res.status(httpStatus.OK).send({
+      //       message: "上傳成功",
+      //       status: "success",
+      //       data: checkstatus,
+      //     });
+      //   } else {
+      //     res.status(httpStatus.OK).send({
+      //       message: "上傳失敗",
+      //       status: "fail",
+      //       data: checkstatus,
+      //     });
+      //   }
+      // } else {
+      for (var i = 0; i < req.files.length; i++) {
+        filesname.push(req.files[i].originalname);
+      }
+      const orgfilename = await uploadService.getassfilename(ass_id);
+      const editassdata = await uploadService.editassessment(
+        ass_id,
+        title,
+        description,
+        name,
+        filesname
+      );
+      if (editassdata.exist === "duplicate") {
+        res.status(httpStatus.OK).send({
+          message: `以下檔案名稱重複: ${result.duplicateFiles.join(", ")}`,
+          status: "fail",
+        });
+      }
+      // console.log(editassdata);
+      if (editassdata === true) {
+        const deletefile = await fileUpload.deleteDBFiles(
+          //     req.files[i].originalname,
+          orgfilename,
+          "assessment"
         );
-        if (result === true) {
-          res.status(httpStatus.OK).send({
-            message: "上傳成功",
-            status: "success",
-            data: checkstatus,
-          });
-        } else {
-          res.status(httpStatus.OK).send({
-            message: "上傳失敗",
-            status: "fail",
-            data: checkstatus,
-          });
-        }
-      } else {
-        for (var i = 0; i < req.files.length; i++) {
-          filesname.push(req.files[i].originalname);
-        }
-        const orgfilename = await uploadService.getassfilename(ass_id);
-        const editassdata = await uploadService.editassessment(
-          ass_id,
-          title,
-          description,
-          filesname
-        );
-        if (editassdata.exist === "duplicate") {
-          res.status(httpStatus.OK).send({
-            message: `以下檔案名稱重複: ${result.duplicateFiles.join(", ")}`,
-            status: "fail",
-          });
-        }
-        // console.log(editassdata);
-        if (editassdata === true) {
-          const deletefile = await fileUpload.deleteDBFiles(
-            //     req.files[i].originalname,
-            orgfilename,
-            "assessment"
-          );
-          if (deletefile === true) {
-            const result = await fileUpload.uploadFiles(
-              req.files,
-              "assessment"
-            );
-            if (result === true) {
-              res.status(httpStatus.OK).send({
-                message: "上傳成功",
-                status: "success",
-              });
-            } else {
-              res.status(httpStatus.OK).send({
-                message: "上傳失敗",
-                status: "fail",
-              });
-            }
+        if (deletefile === true) {
+          const result = await fileUpload.uploadFiles(req.files, "assessment");
+          if (result === true) {
+            res.status(httpStatus.OK).send({
+              message: "上傳成功",
+              status: "success",
+            });
           } else {
             res.status(httpStatus.OK).send({
               message: "上傳失敗",
@@ -304,7 +297,13 @@ const editassessment = async (req, res) => {
             status: "fail",
           });
         }
+      } else {
+        res.status(httpStatus.OK).send({
+          message: "上傳失敗",
+          status: "fail",
+        });
       }
+      // }
     });
   } catch (error) {
     console.error("Upload invoice error:", error);
@@ -333,60 +332,56 @@ const editreceipt = async (req, res) => {
       const title = req.body.title;
       const description = req.body.description;
       const rec_id = req.body.id;
+      const name = req.body.name;
       var filesname = [];
       var filearray = [];
-      const checkstatus = req.body.edit;
-      if (checkstatus == 0) {
-        const result = await fileUpload.uploadFiles(req.files, "cache/receipt");
-        if (result === true) {
-          res.status(httpStatus.OK).send({
-            message: "上傳成功",
-            status: "success",
-            data: checkstatus,
-          });
-        } else {
-          res.status(httpStatus.OK).send({
-            message: "上傳失敗",
-            status: "fail",
-            data: checkstatus,
-          });
-        }
-      } else {
-        const orgfilename = await uploadService.getrecfilename(rec_id);
-        // console.log(filesname);
-        for (var i = 0; i < req.files.length; i++) {
-          filesname.push(req.files[i].originalname);
-        }
-        const editrecdata = await uploadService.editreceipt(
-          rec_id,
-          title,
-          description,
-          filesname
+      // const checkstatus = uploadService.checkrecstatus(rec_id);
+      // if (checkstatus == 0) {
+      //   const result = await fileUpload.uploadFiles(req.files, "cache/receipt");
+      //   if (result === true) {
+      //     res.status(httpStatus.OK).send({
+      //       message: "上傳成功",
+      //       status: "success",
+      //       data: checkstatus,
+      //     });
+      //   } else {
+      //     res.status(httpStatus.OK).send({
+      //       message: "上傳失敗",
+      //       status: "fail",
+      //       data: checkstatus,
+      //     });
+      //   }
+      // } else {
+      const orgfilename = await uploadService.getrecfilename(rec_id);
+      // console.log(filesname);
+      for (var i = 0; i < req.files.length; i++) {
+        filesname.push(req.files[i].originalname);
+      }
+      const editrecdata = await uploadService.editreceipt(
+        rec_id,
+        title,
+        description,
+        name,
+        filesname
+      );
+      if (editrecdata.exist === "duplicate") {
+        res.status(httpStatus.OK).send({
+          message: "請勿上傳重複檔案",
+          status: "fail",
+        });
+      }
+      if (editrecdata === true) {
+        const deletefile = await fileUpload.deleteDBFiles(
+          orgfilename,
+          "receipt"
         );
-        if (editrecdata.exist === "duplicate") {
-          res.status(httpStatus.OK).send({
-            message: "請勿上傳重複檔案",
-            status: "fail",
-          });
-        }
-        if (editrecdata === true) {
-          const deletefile = await fileUpload.deleteDBFiles(
-            orgfilename,
-            "receipt"
-          );
-          if (deletefile === true) {
-            const result = await fileUpload.uploadFiles(req.files, "receipt");
-            if (result === true) {
-              res.status(httpStatus.OK).send({
-                message: "上傳成功",
-                status: "success",
-              });
-            } else {
-              res.status(httpStatus.OK).send({
-                message: "上傳失敗",
-                status: "fail",
-              });
-            }
+        if (deletefile === true) {
+          const result = await fileUpload.uploadFiles(req.files, "receipt");
+          if (result === true) {
+            res.status(httpStatus.OK).send({
+              message: "上傳成功",
+              status: "success",
+            });
           } else {
             res.status(httpStatus.OK).send({
               message: "上傳失敗",
@@ -399,7 +394,13 @@ const editreceipt = async (req, res) => {
             status: "fail",
           });
         }
+      } else {
+        res.status(httpStatus.OK).send({
+          message: "上傳失敗",
+          status: "fail",
+        });
       }
+      // }
     });
   } catch (error) {
     console.error("Upload invoice error:", error);
