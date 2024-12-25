@@ -7,7 +7,7 @@ var uploadRouter = require("./routes/upload");
 var recodeRouter = require("./routes/recode");
 var app = express();
 
-const port = 3000;
+const port = 8001;
 
 app.use(function (req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
