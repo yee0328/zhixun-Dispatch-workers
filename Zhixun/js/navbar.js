@@ -15,14 +15,16 @@ $(document).ready(function () {
       const dropdownMenu = $(this).siblings(".dropdown-menu");
       if (dropdownMenu.children().length === 0) {
         const dropdownItems = [
+          "物業",
           "機電",
           "弱電",
           "電梯",
-          "廚餘管線",
-          "污水處理",
-          "泳池",
           "園藝",
-          "清潔",
+          "環保",
+          "社區清潔",
+          "泳池",
+          "影印機",
+          "公設區域修繕",
         ];
         dropdownItems.forEach((item) => {
           dropdownMenu.append(
