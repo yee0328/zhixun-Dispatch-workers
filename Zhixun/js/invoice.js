@@ -5,6 +5,9 @@ $(document).ready(function () {
     console.log("1");
     BreadcrumbManager.updateBreadcrumb(iconText, uploadtext);
   }
+  $("h4.back").html(
+    `<i class="fa-solid fa-arrow-left changeText" id="goBack"></i>${iconText}發票`
+  );
   $("#uploadBox").on("click", function () {
     const fileInput = $(
       '<input type="file" accept=".pdf, .png, .jpeg, .jpg" multiple style="display:none;">'

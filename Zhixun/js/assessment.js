@@ -5,6 +5,9 @@ $(document).ready(function () {
     console.log("1");
     BreadcrumbManager.updateBreadcrumb(iconText, uploadtext);
   }
+  $("h4.back").html(
+    `<i class="fa-solid fa-arrow-left changeText" id="goBack"></i>${iconText}估價單`
+  );
   // var orgdata = JSON.parse(localStorage.getItem("orgdata")) || [];
   // var ass_id = "";
   $("#uploadBox").on("click", function () {

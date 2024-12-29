@@ -3,6 +3,9 @@ $(document).ready(function () {
   const recordType = "查詢估價單";
   const previewType = "估價單紀錄";
   const editType = "編輯估價單";
+  $("h4.back").html(
+    `<i class="fa-solid fa-arrow-left changeText" id="goBack"></i>${iconText}估價單`
+  );
   if (typeof BreadcrumbManager !== "undefined") {
     console.log("1");
     BreadcrumbManager.updateBreadcrumb(

@@ -11,6 +11,8 @@ $(document).ready(function () {
   $(".fa-chevron-left").on("click", function () {
     window.location.href = "view.html";
   });
+  var changeText = document.getElementById("changeText");
+  changeText.innerHTML = changeText.innerHTML.replace("機電", iconText);
   callAPI(iconText)
     .then((data) => {
       // console.log(data);

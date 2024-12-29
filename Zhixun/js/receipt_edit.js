@@ -12,6 +12,9 @@ $(document).ready(function () {
       editType
     );
   }
+  $("h4.back").html(
+    `<i class="fa-solid fa-arrow-left changeText" id="goBack"></i>${iconText}發票`
+  );
   var rec_id = localStorage.getItem("rec_id");
   // var orgdata = JSON.parse(localStorage.getItem("orgdata")) || [];
   // var currentData = orgdata.filter(

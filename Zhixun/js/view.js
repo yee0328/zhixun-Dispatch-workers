@@ -37,4 +37,6 @@ $(document).ready(function () {
     var recordType = $(this).find(".fa-solid").attr("class").split(" ").at(-1);
     window.location.href = `records_${recordType}.html`;
   });
+  var changeText = document.getElementById("changeText");
+  changeText.innerHTML = changeText.innerHTML.replace("機電", iconText);
 });
