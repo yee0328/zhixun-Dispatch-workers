@@ -49,6 +49,10 @@ function fillInfo(data) {
   $(".uploader").text(data[0].user);
   $(".upload-date").text(formattedDate);
   var path = "../../file/assessment/";
+  $(".slider").on("afterChange", function (event, slick, currentSlide) {
+    var currentImageSrc = $(".slider .slick-current ").attr("src");
+    $(".image-preview img").attr("src", currentImageSrc);
+  });
   const sliderContainer = $(".slider");
   sliderContainer.empty();
   const pdfListContainer = $(".uploaded-file");
